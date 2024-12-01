@@ -40,6 +40,12 @@ Day1Solver >> leftList: anObject [
 	leftList := anObject
 ]
 
+{ #category : 'processing' }
+Day1Solver >> process [
+	leftList := rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
+	rightList := rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
+]
+
 { #category : 'accessing' }
 Day1Solver >> rawData [
 
