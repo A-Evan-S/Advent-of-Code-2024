@@ -22,7 +22,7 @@ Day1SolverTest >> testCountRightOccurrences [
 ]
 
 { #category : 'tests' }
-Day1SolverTest >> testProcessRawData [
+Day1SolverTest >> testParseRawData [
 	| rawData solver |
 	rawData :=
 '3   4
@@ -62,21 +62,4 @@ Day1SolverTest >> testSolvePart2 [
 3   3'.
 	solver := Day1Solver newFromString: rawData.
 	self assert: solver solvePart2 equals: 31
-]
-
-{ #category : 'tests' }
-Day1SolverTest >> testSorting [
-	| rawData solver |
-	rawData :=
-'3   4
-4   3
-2   5
-1   3
-3   9
-3   3'.
-	solver := Day1Solver newFromString: rawData.
-	solver sortLeft.
-	self assert: solver leftList equals: #(1 2 3 3 3 4).
-	solver sortRight.
-	self assert: solver rightList equals: #(3 3 3 4 5 9).
 ]

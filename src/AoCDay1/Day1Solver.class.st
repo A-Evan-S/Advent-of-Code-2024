@@ -29,7 +29,7 @@ Day1Solver class >> newFromString: aString [
 	^ solver
 ]
 
-{ #category : 'accessing' }
+{ #category : 'processing' }
 Day1Solver >> countRightOccurrences: anInteger [ 
 	^ (rightList select: [ :x | x == anInteger ]) size
 ]
@@ -48,12 +48,6 @@ Day1Solver >> leftList: anObject [
 
 { #category : 'processing' }
 Day1Solver >> parseRawData [
-	leftList := rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
-	rightList := rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
-]
-
-{ #category : 'processing' }
-Day1Solver >> process [
 	leftList := rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
 	rightList := rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
 ]
@@ -82,24 +76,15 @@ Day1Solver >> rightList: anObject [
 	rightList := anObject
 ]
 
-{ #category : 'accessing' }
+{ #category : 'solving' }
 Day1Solver >> solvePart1 [
-	self sortLeft; sortRight.
+	leftList sort.
+	rightList sort.
 	^ (leftList with: rightList collect: [ :l :r | (l - r) abs ]) sum
 	
 ]
 
-{ #category : 'accessing' }
+{ #category : 'solving' }
 Day1Solver >> solvePart2 [
 	^ (leftList collect: [ :x | x * (self countRightOccurrences: x) ]) sum
-]
-
-{ #category : 'sorting' }
-Day1Solver >> sortLeft [
-	leftList := leftList sorted
-]
-
-{ #category : 'sorting' }
-Day1Solver >> sortRight [
-	rightList := rightList sorted
 ]
