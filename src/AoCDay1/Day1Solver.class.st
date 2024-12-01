@@ -3,9 +3,8 @@ Solver for day 1 of Advent of Code 2024
 "
 Class {
 	#name : 'Day1Solver',
-	#superclass : 'Object',
+	#superclass : 'AoCSolver',
 	#instVars : [
-		'rawData',
 		'leftList',
 		'rightList'
 	],
@@ -42,20 +41,8 @@ Day1Solver >> leftList: anObject [
 
 { #category : 'processing' }
 Day1Solver >> parseRawData [
-	leftList := rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
-	rightList := rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
-]
-
-{ #category : 'accessing' }
-Day1Solver >> rawData [
-
-	^ rawData
-]
-
-{ #category : 'accessing' }
-Day1Solver >> rawData: anObject [
-
-	rawData := anObject
+	leftList := self rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
+	rightList := self rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
 ]
 
 { #category : 'accessing' }
