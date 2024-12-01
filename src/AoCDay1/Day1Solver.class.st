@@ -15,12 +15,18 @@ Class {
 
 { #category : 'instance creation' }
 Day1Solver class >> newFromFilename: filename [
-	^ self new rawData: filename asFileReference contents lines
+	| solver |
+	solver := self new rawData: filename asFileReference contents lines.
+	solver parseRawData.
+	^ solver
 ]
 
 { #category : 'instance creation' }
 Day1Solver class >> newFromString: aString [
-	^ self new rawData: aString lines
+	| solver |
+	solver := self new rawData: aString lines.
+	solver parseRawData.
+	^ solver
 ]
 
 { #category : 'accessing' }
@@ -38,6 +44,12 @@ Day1Solver >> leftList [
 Day1Solver >> leftList: anObject [
 
 	leftList := anObject
+]
+
+{ #category : 'processing' }
+Day1Solver >> parseRawData [
+	leftList := rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
+	rightList := rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].
 ]
 
 { #category : 'processing' }
