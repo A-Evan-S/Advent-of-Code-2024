@@ -39,7 +39,7 @@ Day1Solver >> leftList: anObject [
 	leftList := anObject
 ]
 
-{ #category : 'processing' }
+{ #category : 'parsing' }
 Day1Solver >> parseRawData [
 	leftList := self rawData collect: [ :s | ((s findTokens: ' ') at: 1) asNumber].
 	rightList := self rawData collect: [ :s | ((s findTokens: ' ') at: 2) asNumber].

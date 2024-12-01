@@ -21,6 +21,11 @@ AoCSolver class >> newFromString: aString [
 	^ self new rawData: aString lines; parseRawData
 ]
 
+{ #category : 'parsing' }
+AoCSolver >> parseRawData [
+	^ self subclassResponsibility
+]
+
 { #category : 'accessing' }
 AoCSolver >> rawData [
 
