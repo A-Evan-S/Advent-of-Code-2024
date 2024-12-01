@@ -15,18 +15,12 @@ Class {
 
 { #category : 'instance creation' }
 Day1Solver class >> newFromFilename: filename [
-	| solver |
-	solver := self new rawData: filename asFileReference contents lines.
-	solver parseRawData.
-	^ solver
+	^ self new rawData: filename asFileReference contents lines; parseRawData
 ]
 
 { #category : 'instance creation' }
 Day1Solver class >> newFromString: aString [
-	| solver |
-	solver := self new rawData: aString lines.
-	solver parseRawData.
-	^ solver
+	^ self new rawData: aString lines; parseRawData
 ]
 
 { #category : 'processing' }
