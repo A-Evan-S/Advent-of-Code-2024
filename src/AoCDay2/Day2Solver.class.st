@@ -18,7 +18,6 @@ Day2Solver >> parseRawData [
 
 { #category : 'accessing' }
 Day2Solver >> reports [
-
 	^ reports
 ]
 
