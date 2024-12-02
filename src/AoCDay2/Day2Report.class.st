@@ -38,13 +38,11 @@ Day2Report >> isSafe [
 
 { #category : 'accessing' }
 Day2Report >> levels [
-
 	^ levels
 ]
 
 { #category : 'accessing' }
 Day2Report >> levels: anObject [
-
 	levels := anObject
 ]
 
