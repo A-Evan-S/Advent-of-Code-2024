@@ -20,7 +20,7 @@ Day2SolverTest >> testParseRawData [
 	| solver |
 	solver := Day2Solver newFromString: self sampleInput.
 	self assert: solver reports size equals: 6.
-	self assert: (solver reports at: 1) equals: (Day2Report newFromString: '7 6 4 2 1').
+	self assert: (solver reports at: 1) levels equals: (OrderedCollection newFrom: #(7 6 4 2 1)).
 ]
 
 { #category : 'tests' }
