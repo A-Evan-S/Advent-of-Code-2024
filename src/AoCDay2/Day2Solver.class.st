@@ -28,10 +28,10 @@ Day2Solver >> reports: anObject [
 
 { #category : 'solving' }
 Day2Solver >> solvePart1 [
-	^ (reports select: [ :report | report isSafe ]) size
+	^ reports count: [ :report | report isSafe ]
 ]
 
 { #category : 'solving' }
 Day2Solver >> solvePart2 [
-	^ (reports select: [ :report | report isNearlySafe ]) size
+	^ reports count: [ :report | report isNearlySafe ]
 ]
