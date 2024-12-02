@@ -36,12 +36,12 @@ Day2Report >> isSafe [
 	^ (self isIncreasing or: self isDecreasing) and: self levelsAreSimilar
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Day2Report >> levels [
 	^ levels
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - private' }
 Day2Report >> levels: anObject [
 	levels := anObject
 ]
