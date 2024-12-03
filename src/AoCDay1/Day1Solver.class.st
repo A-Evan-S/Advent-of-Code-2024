@@ -12,16 +12,6 @@ Class {
 	#package : 'AoCDay1'
 }
 
-{ #category : 'instance creation' }
-Day1Solver class >> newFromFilename: filename [
-	^ self new rawData: filename asFileReference contents lines; parseRawData
-]
-
-{ #category : 'instance creation' }
-Day1Solver class >> newFromString: aString [
-	^ self new rawData: aString lines; parseRawData
-]
-
 { #category : 'processing' }
 Day1Solver >> countRightOccurrences: anInteger [ 
 	^ (rightList select: [ :x | x == anInteger ]) size
@@ -42,7 +32,7 @@ Day1Solver >> leftList: anObject [
 { #category : 'parsing' }
 Day1Solver >> parseRawData [
 	| numberPairs |
-	numberPairs := self rawData collect: [ :s | s findTokens: ' ' ].
+	numberPairs := self rawData lines collect: [ :s | s findTokens: ' ' ].
 	leftList := numberPairs collect: [ :p | p first asNumber].
 	rightList := numberPairs collect: [ :p | p second asNumber].
 ]

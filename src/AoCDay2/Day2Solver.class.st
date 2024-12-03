@@ -13,7 +13,7 @@ Class {
 
 { #category : 'parsing' }
 Day2Solver >> parseRawData [
-	reports := rawData collect: [ :s | Day2Report newFromString: s].
+	reports := rawData lines collect: [ :s | Day2Report newFromString: s].
 ]
 
 { #category : 'accessing' }

@@ -11,16 +11,6 @@ Class {
 	#package : 'AoCDay3'
 }
 
-{ #category : 'instance creation' }
-Day3Solver class >> newFromFilename: filename [
-	^ self new rawData: filename asFileReference contents; parseRawData
-]
-
-{ #category : 'instance creation' }
-Day3Solver class >> newFromString: aString [
-	^ self new rawData: aString; parseRawData
-]
-
 { #category : 'solving' }
 Day3Solver >> evalMul: aString [ 
 	| idx val1 val2 |
@@ -48,11 +38,8 @@ Day3Solver >> solvePart2 [
 	total := 0.
 	shouldMul := true.
 	operations do: [ :op |
-		((op beginsWith: 'mul') and: shouldMul) ifTrue: [
-			total := total + (self evalMul: op)
-		] ifFalse: [ 
-			shouldMul := op = 'do()'
-		]
-	].
+		((op beginsWith: 'mul') and: shouldMul)
+			ifTrue: [ total := total + (self evalMul: op) ]
+			ifFalse: [ shouldMul := op = 'do()' ] ].
 	^ total
 ]
