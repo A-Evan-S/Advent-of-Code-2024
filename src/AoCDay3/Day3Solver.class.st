@@ -11,13 +11,12 @@ Class {
 	#package : 'AoCDay3'
 }
 
-{ #category : 'solving' }
+{ #category : 'evaluating' }
 Day3Solver >> evalMul: aString [ 
-	| idx val1 val2 |
-	idx := aString indexOf: $,.
-	val1 := (aString copyFrom: 5 to: idx) asNumber.
-	val2 := (aString copyFrom: (idx + 1) to: (aString size - 1)) asNumber.
-	^ val1 * val2
+	| re |
+	re := 'mul\((\d{1,3}),(\d{1,3})\)' asRegex.
+	re matches: aString.
+	^ ((re subexpression: 2) asNumber) * ((re subexpression: 3) asNumber)
 ]
 
 { #category : 'parsing' }

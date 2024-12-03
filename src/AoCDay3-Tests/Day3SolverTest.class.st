@@ -19,6 +19,16 @@ Day3SolverTest >> sampleInput2 [
 ]
 
 { #category : 'tests' }
+Day3SolverTest >> testEvalMul [
+	| solver |
+	solver := Day3Solver new.
+	
+	self assert: (solver evalMul: 'mul(3,12)') equals: 36.
+	self assert: (solver evalMul: 'mul(1,45)') equals: 45.
+	self assert: (solver evalMul: 'mul(123,456)') equals: 56088.
+]
+
+{ #category : 'tests' }
 Day3SolverTest >> testSolvePart1 [
 	| solver |
 	solver := Day3Solver  newFromString: self sampleInput.
