@@ -35,7 +35,7 @@ Day4Solver >> countXmasAt: aPoint [
 ]
 
 { #category : 'accessing' }
-Day4Solver >> isX_masAt: aPoint [
+Day4Solver >> isDiagonalXmasAt: aPoint [
 
 	| a b |
 	a := String withAll: {
@@ -52,10 +52,10 @@ Day4Solver >> isX_masAt: aPoint [
 { #category : 'accessing' }
 Day4Solver >> isXmasAt: aPoint direction: aDirection [
 
-	| tempPoint |
+	| offsetPoint |
 	^ (1 to: 4) allSatisfy: [ :i |
-		  tempPoint := aPoint + (aDirection * (i - 1)).
-		  (self at: tempPoint) = ('XMAS' at: i) ]
+		  offsetPoint := aPoint + (aDirection * (i - 1)).
+		  (self at: offsetPoint) = ('XMAS' at: i) ]
 ]
 
 { #category : 'parsing' }
@@ -83,5 +83,5 @@ Day4Solver >> solvePart2 [
 	^ grid
 		  withIndicesInject: 0
 		  into: [ :count :x :r :c |
-		  count + (self isX_masAt: r @ c) asInteger ]
+		  count + (self isDiagonalXmasAt: r @ c) asInteger ]
 ]
