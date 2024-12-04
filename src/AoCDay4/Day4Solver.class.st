@@ -72,16 +72,11 @@ Day4Solver >> parseRawData [
 { #category : 'solving' }
 Day4Solver >> solvePart1 [
 
-	^ grid
-		  indicesInject: 0
-		  into: [ :count :r :c | count + (self countXmasAt: r @ c) ]
+	^ (grid indicesCollect: [ :r :c | self countXmasAt: r @ c ]) sum
 ]
 
 { #category : 'solving' }
 Day4Solver >> solvePart2 [
 
-	^ grid
-		  withIndicesInject: 0
-		  into: [ :count :x :r :c |
-		  count + (self isDiagonalXmasAt: r @ c) asInteger ]
+	^ grid indices count: [ :point | self isDiagonalXmasAt: point ]
 ]
