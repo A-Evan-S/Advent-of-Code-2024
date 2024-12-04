@@ -72,7 +72,7 @@ Day4Solver >> parseRawData [
 { #category : 'solving' }
 Day4Solver >> solvePart1 [
 
-	^ (grid indicesCollect: [ :r :c | self countXmasAt: r @ c ]) sum
+	^ (grid indices collect: [ :point | self countXmasAt: point ]) sum
 ]
 
 { #category : 'solving' }
