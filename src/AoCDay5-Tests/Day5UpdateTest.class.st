@@ -16,8 +16,8 @@ Day5UpdateTest >> testMiddlePageNumber [
 
 { #category : 'tests' }
 Day5UpdateTest >> testSatisfies [
-	| rule update |
-	rule := Day5Rule newFromString: '3|5'.
-	update := Day5Update newFromString: '1,4,3,8,5,9'.
-	self assert: (update satisfies: rule)
+	self assert: ((Day5Update newFromString: '1,4,3,8,5,9') satisfies: #(3 5)).
+	self assert: ((Day5Update newFromString: '3,8,5,9,1,4') satisfies: #(3 5)).
+	self deny: ((Day5Update newFromString: '5,3,8,9,1,4') satisfies: #(3 5)).
+	self assert: ((Day5Update newFromString: '3,8,9,1,4') satisfies: #(3 5)).
 ]

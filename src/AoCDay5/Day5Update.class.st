@@ -13,14 +13,12 @@ Class {
 
 { #category : 'instance creation' }
 Day5Update class >> newFromString: aString [
-	^ self new pageNumbers: ((aString findTokens: ',') collect: [ :x | x asNumber ])
+	^ self new pageNumbers: ((',' split: aString) collect: [ :x | x asInteger ])
 ]
 
 { #category : 'accessing' }
 Day5Update >> middlePageNumber [
-	| middleIndex |
-	middleIndex := ((pageNumbers size) / 2) ceiling.
-	^ pageNumbers at: middleIndex
+	^ pageNumbers at: ((pageNumbers size) / 2) ceiling
 ]
 
 { #category : 'accessing' }

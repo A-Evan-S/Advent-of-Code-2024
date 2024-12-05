@@ -14,19 +14,18 @@ Class {
 
 { #category : 'parsing' }
 Day5Solver >> parseRawData [
-	| rulesString updatesString idx |
-	idx := rawData findString: ('<n><n>' expandMacros).
-	rulesString := rawData first: idx.
-	updatesString := rawData allButFirst: idx + 3.
-	rules := rulesString lines collect: [ :ruleString | Day5Rule newFromString: ruleString].
-	updates := updatesString lines collect: [ :updateString | Day5Update newFromString: updateString].
+	| inputPieces |
+	inputPieces := ('<n><n>' expandMacros) split: rawData.
+	rules := inputPieces first lines collect: [ :ruleString | ('|' split: ruleString) collect: [ :x | x asInteger ] ].
+	updates := inputPieces second lines collect: [ :updateString | Day5Update newFromString: updateString].
 ]
 
 { #category : 'solving' }
 Day5Solver >> solvePart1 [
 
 	^ (updates
-		   select: [ :update | rules allSatisfy: [ :rule | update satisfies: rule ] ]
+		   select: [ :update |
+		   rules allSatisfy: [ :rule | update satisfies: rule ] ]
 		   thenCollect: [ :update | update middlePageNumber ]) sum
 ]
 
@@ -34,7 +33,6 @@ Day5Solver >> solvePart1 [
 Day5Solver >> solvePart2 [
 
 	^ (updates
-		   select: [ :update |
-		   (rules allSatisfy: [ :rule | update satisfies: rule ]) not ]
+		   select: [ :update | (rules allSatisfy: [ :rule | update satisfies: rule ]) not ]
 		   thenCollect: [ :update | (update sortWith: rules) middlePageNumber ]) sum
 ]
