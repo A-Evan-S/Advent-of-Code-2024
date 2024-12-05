@@ -16,7 +16,7 @@ Class {
 Day5Solver >> parseRawData [
 	| inputPieces |
 	inputPieces := ('<n><n>' expandMacros) split: rawData.
-	rules := inputPieces first lines collect: [ :ruleString | ('|' split: ruleString) collect: [ :x | x asInteger ] ].
+	rules := inputPieces first lines collect: [ :ruleString | (ruleString splitOn: $|) collect: #asInteger ].
 	updates := inputPieces second lines collect: [ :updateString | Day5Update newFromString: updateString].
 ]
 
@@ -26,7 +26,7 @@ Day5Solver >> solvePart1 [
 	^ (updates
 		   select: [ :update |
 		   rules allSatisfy: [ :rule | update satisfies: rule ] ]
-		   thenCollect: [ :update | update middlePageNumber ]) sum
+		   thenCollect: #middlePageNumber) sum
 ]
 
 { #category : 'solving' }
@@ -34,5 +34,5 @@ Day5Solver >> solvePart2 [
 
 	^ (updates
 		   select: [ :update | (rules allSatisfy: [ :rule | update satisfies: rule ]) not ]
-		   thenCollect: [ :update | (update sortWith: rules) middlePageNumber ]) sum
+		   thenCollect: [ :update | (update sortedWith: rules) middlePageNumber ]) sum
 ]

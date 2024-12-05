@@ -13,12 +13,12 @@ Class {
 
 { #category : 'instance creation' }
 Day5Update class >> newFromString: aString [
-	^ self new pageNumbers: ((',' split: aString) collect: [ :x | x asInteger ])
+	^ self new pageNumbers: ((aString splitOn: $,) collect: [ :x | x asInteger ])
 ]
 
 { #category : 'accessing' }
 Day5Update >> middlePageNumber [
-	^ pageNumbers at: ((pageNumbers size) / 2) ceiling
+	^ pageNumbers at: ((pageNumbers size + 1) // 2)
 ]
 
 { #category : 'accessing' }
@@ -29,12 +29,12 @@ Day5Update >> pageNumbers: aCollection [
 { #category : 'verifying' }
 Day5Update >> satisfies: aDay5Rule [ 
 	| idx1 idx2 |
-	idx1 := pageNumbers indexOf: (aDay5Rule first).
-	idx2 := pageNumbers indexOf: (aDay5Rule second).
-	^ idx1 = 0 or: (idx2 = 0 or: idx1 < idx2)
+	idx1 := pageNumbers indexOf: (aDay5Rule first) ifAbsent: [ ^ true ].
+	idx2 := pageNumbers indexOf: (aDay5Rule second) ifAbsent: [ ^ true ].
+	^ idx1 < idx2
 ]
 
 { #category : 'sorting' }
-Day5Update >> sortWith: aRuleset [
+Day5Update >> sortedWith: aRuleset [
 	pageNumbers sort: [ :a :b | aRuleset includes: (OrderedCollection with: a with: b) ].
 ]
