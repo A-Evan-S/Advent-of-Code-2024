@@ -36,5 +36,5 @@ Day5Update >> satisfies: aDay5Rule [
 
 { #category : 'sorting' }
 Day5Update >> sortWith: aRuleset [
-	pageNumbers sort: [ :a :b | aRuleset includes: (OrderedCollection newFromArray: { a . b }) ].
+	pageNumbers sort: [ :a :b | aRuleset includes: (OrderedCollection with: a with: b) ].
 ]
