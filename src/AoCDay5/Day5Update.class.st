@@ -27,10 +27,10 @@ Day5Update >> pageNumbers: aCollection [
 ]
 
 { #category : 'verifying' }
-Day5Update >> satisfies: aDay5Rule [ 
+Day5Update >> satisfies: aRule [ 
 	| idx1 idx2 |
-	idx1 := pageNumbers indexOf: (aDay5Rule first) ifAbsent: [ ^ true ].
-	idx2 := pageNumbers indexOf: (aDay5Rule second) ifAbsent: [ ^ true ].
+	idx1 := pageNumbers indexOf: (aRule first) ifAbsent: [ ^ true ].
+	idx2 := pageNumbers indexOf: (aRule second) ifAbsent: [ ^ true ].
 	^ idx1 < idx2
 ]
 
