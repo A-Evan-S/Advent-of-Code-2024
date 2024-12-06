@@ -14,6 +14,11 @@ Class {
 	#package : 'AoCDay6'
 }
 
+{ #category : 'adding' }
+Day6Solver >> addObstacle: aPoint [
+	(self inBounds: aPoint) ifTrue: [ obstacles add: aPoint ]
+]
+
 { #category : 'checking' }
 Day6Solver >> doesCycle [
 	| guard visited nextPosition |
@@ -79,7 +84,7 @@ Day6Solver >> solvePart2 [
 		1 to: numCols do: [ :c |
 			(r @ c ~= templateGuard position and: (self hasObstacle: r @ c) not)
 				ifTrue: [
-					obstacles add: r @ c.
+					self addObstacle: r @ c.
 					self doesCycle ifTrue: [ count := count + 1 ].
 					obstacles remove: r @ c ] ] ].
 	^ count
