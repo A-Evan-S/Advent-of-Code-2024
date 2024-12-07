@@ -14,11 +14,10 @@ Class {
 
 { #category : 'instance creation' }
 Day7Equation class >> newFromString: aString [ 
-	| equation |
-	equation := self new.
-	equation testValue: ((aString splitOn: ': ') first asInteger).
-	equation terms: ((((aString splitOn: ': ') second) splitOn: ' ') collect: #asInteger).
-	^ equation
+	| parts terms |
+	parts := aString splitOn: ': '.
+	terms := (parts second splitOn: ' ') collect: #asInteger.
+	^ self new testValue: parts first asInteger; terms: terms
 ]
 
 { #category : 'testing' }
