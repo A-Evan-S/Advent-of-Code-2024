@@ -26,5 +26,5 @@ Day7Solver >> solvePart1 [
 { #category : 'solving' }
 Day7Solver >> solvePart2 [
 
-	^ ((equations select: [ :eq | eq canBeSolved: { #+. #*. #'||' } ]) collect: #testValue) sum
+	^ ((equations select: [ :eq | eq canBeSolved: { #+. #*. #|| } ]) collect: #testValue) sum
 ]
