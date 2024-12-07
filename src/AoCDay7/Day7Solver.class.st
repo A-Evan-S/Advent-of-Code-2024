@@ -20,18 +20,11 @@ Day7Solver >> parseRawData [
 { #category : 'solving' }
 Day7Solver >> solvePart1 [
 
-	^ ((equations select: [ :eq |
-		    eq canBeSolved: {
-				    [ :a :b | a + b ].
-				    [ :a :b | a * b ] } ]) collect: #testValue) sum
+	^ ((equations select: [ :eq | eq canBeSolved: { #+. #* } ]) collect: #testValue) sum
 ]
 
 { #category : 'solving' }
 Day7Solver >> solvePart2 [
 
-	^ ((equations select: [ :eq |
-		    eq canBeSolved: {
-				    [ :a :b | a + b ].
-				    [ :a :b | a * b ].
-				    [ :a :b | a || b ] } ]) collect: #testValue) sum
+	^ ((equations select: [ :eq | eq canBeSolved: { #+. #*. #'||' } ]) collect: #testValue) sum
 ]
