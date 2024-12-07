@@ -26,10 +26,9 @@ Day7Equation >> canBeSolved: operators [
 	| totals |
 	totals := { terms first }.
 	terms allButFirstDo: [ :term |
-		totals := (operators collect:
-			          [ :op |
-			          totals collect: [ :prev | op value: prev value: term ] ])
-				          flattened ].
+		totals := (operators collect: [ :op |
+			           totals collect: [ :prev | op value: prev value: term ] ])
+			          flattened select: [ :x | x <= testValue ] ].
 	^ totals includes: testValue
 ]
 
