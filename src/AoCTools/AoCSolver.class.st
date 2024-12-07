@@ -37,3 +37,13 @@ AoCSolver >> rawData: anObject [
 
 	rawData := anObject
 ]
+
+{ #category : 'solving' }
+AoCSolver >> solvePart1 [
+	^ self subclassResponsibility
+]
+
+{ #category : 'solving' }
+AoCSolver >> solvePart2 [
+	^ self subclassResponsibility
+]
