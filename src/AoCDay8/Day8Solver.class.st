@@ -15,6 +15,7 @@ Class {
 
 { #category : 'accessing' }
 Day8Solver >> nodePairs [
+
 	| pairs |
 	pairs := OrderedCollection new.
 	frequencies do: [ :freq |
