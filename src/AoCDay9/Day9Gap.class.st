@@ -1,3 +1,6 @@
+"
+I am a gap in the disk
+"
 Class {
 	#name : 'Day9Gap',
 	#superclass : 'Object',

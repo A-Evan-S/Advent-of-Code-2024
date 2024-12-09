@@ -16,16 +16,23 @@ Class {
 { #category : 'parsing' }
 Day9Solver >> parseRawData [
 
-	| num |
+	| idx |
+	both := (rawData asByteArray - $0 asInteger) asArray.
 	blocks := OrderedCollection new.
 	gaps := OrderedCollection new.
-	both := OrderedCollection new.
-	rawData withIndexDo: [ :d :i |
-		num := d asInteger - $0 asInteger.
-		both add: num.
-		i % 2 = 0
-			ifTrue: [ gaps add: num ]
-			ifFalse: [ blocks add: num ] ]
+	idx := 0.
+	both withIndexDo: [ :num :i |
+		i even
+			ifTrue: [
+				gaps add: (Day9Gap new
+						 gapSize: num;
+						 position: idx) ]
+			ifFalse: [
+				blocks add: (Day9Block new
+						 blockSize: num;
+						 position: idx;
+						 id: i // 2) ].
+		idx := idx + num ]
 ]
 
 { #category : 'solving' }
@@ -49,34 +56,15 @@ Day9Solver >> solvePart1 [
 
 { #category : 'solving' }
 Day9Solver >> solvePart2 [
-	|blocksWithPos gapsWithPos idx block gapIdx gap result |
-	blocksWithPos := OrderedCollection new.
-	gapsWithPos := OrderedCollection new.
-	blocksWithPos add: ( Day9Block new blockSize: (blocks first); position: 0; id: 0).
-	idx := blocks first.
-	2 to: blocks size do: [ :i |
-		gapsWithPos add: (Day9Gap new gapSize: (gaps at: i - 1); position: idx).
-		idx := idx + (gaps at: i - 1).
-		blocksWithPos add: ( Day9Block new blockSize: (blocks at: i); position: idx; id: i-1).
-		idx := idx + (blocks at: i).
-	].
-	blocks size to: 1 by: -1 do: [ :i |
-		block := blocksWithPos at: i.
-		gapIdx := gapsWithPos findFirst: [ :g | g gapSize >= block blockSize ].
-		(gapIdx > 0) ifTrue: [
-			gap := gapsWithPos at: gapIdx.
-			(gap position < block position) ifTrue: [ 
-			block position: gap position.
-			gap gapSize: gap gapSize - block blockSize.
-			gap position: gap position + block blockSize.
-			]
-		].
-	].
-	result := 0.
-	blocksWithPos do: [ :b |
-		b position to: (b position + (b blockSize) - 1) do: [ :i |
-			result := result + (b id * i).
-		].	
-	].
-	^ result
+
+	| gapIdx gap |
+	blocks reversed do: [ :block |
+		gapIdx := gaps findFirst: [ :g | g gapSize >= block blockSize ].
+		gapIdx > 0 ifTrue: [
+			gap := gaps at: gapIdx.
+			gap position < block position ifTrue: [
+				block position: gap position.
+				gap gapSize: gap gapSize - block blockSize.
+				gap position: gap position + block blockSize ] ] ].
+	^ (blocks collect: [ :b | (b position to: b position + b blockSize - 1) sum * b id ]) sum
 ]

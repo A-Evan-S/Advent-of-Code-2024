@@ -1,3 +1,6 @@
+"
+I am a block of data in the disk
+"
 Class {
 	#name : 'Day9Block',
 	#superclass : 'Object',
