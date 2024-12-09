@@ -10,12 +10,21 @@ Class {
 
 { #category : 'test data' }
 Day9SolverTest >> sampleInput [
-	^ ''
+	^ '2333133121414131402'
 ]
 
 { #category : 'tests' }
 Day9SolverTest >> testSolvePart1 [
 
-	self flag: #toImplement.
-	self assert: false
+	| solver |
+	solver := Day9Solver newFromString: self sampleInput.
+	self assert: solver solvePart1 equals: 1928.
+]
+
+{ #category : 'tests' }
+Day9SolverTest >> testSolvePart2 [
+
+	| solver |
+	solver := Day9Solver newFromString: self sampleInput.
+	self assert: solver solvePart2 equals: 2858.
 ]
