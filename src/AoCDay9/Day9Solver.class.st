@@ -37,21 +37,19 @@ Day9Solver >> parseRawData [
 
 { #category : 'solving' }
 Day9Solver >> solvePart1 [
-	| blocksWithIDs idx result everySpot |
-	blocksWithIDs := (blocks collectWithIndex: [ :x :i |(1 to: x) collect: [ :v | i - 1] ]) flattened asOrderedCollection .
+
+	| expandedBlocks idx result everySpot |
+	expandedBlocks := (blocks collectWithIndex: [ :x :i | (1 to: x blockSize) collect: [ :v | i - 1 ] ]) flattened asOrderedCollection.
 	idx := 0.
 	result := 0.
-	everySpot := (both withIndexCollect: [ :size :i | (1 to: size) collect: [ :x |(i odd)] ]) flattened.
-	everySpot withIndexDo: [ :x :i |
-		blocksWithIDs isEmpty ifFalse: [
-				x ifTrue: [
-					result := i - 1 * (blocksWithIDs removeFirst) + result.
-				] ifFalse: [
-					result := i - 1 * (blocksWithIDs removeLast) + result.
-				]
-		].	
-	].
-	^ result
+	everySpot := (both withIndexCollect: [ :size :i | (1 to: size) collect: [ :x | i odd ] ]) flattened.
+	^ (everySpot withIndexCollect: [ :x :i |
+		   expandedBlocks isEmpty
+			   ifTrue: [ 0 ]
+			   ifFalse: [
+				   x
+					   ifTrue: [ (i - 1) * expandedBlocks removeFirst ]
+					   ifFalse: [ (i - 1) * expandedBlocks removeLast ] ] ]) sum
 ]
 
 { #category : 'solving' }
