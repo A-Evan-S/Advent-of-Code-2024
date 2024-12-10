@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'blocks',
 		'gaps',
-		'both'
+		'rawSizes'
 	],
 	#category : 'AoCDay9',
 	#package : 'AoCDay9'
@@ -17,11 +17,11 @@ Class {
 Day9Solver >> parseRawData [
 
 	| idx |
-	both := (rawData asByteArray - $0 asInteger) asArray.
+	rawSizes := (rawData asByteArray - $0 asInteger) asArray.
 	blocks := OrderedCollection new.
 	gaps := OrderedCollection new.
 	idx := 0.
-	both withIndexDo: [ :num :i |
+	rawSizes withIndexDo: [ :num :i |
 		i even
 			ifTrue: [
 				gaps add: (Day9Gap new
@@ -38,11 +38,9 @@ Day9Solver >> parseRawData [
 { #category : 'solving' }
 Day9Solver >> solvePart1 [
 
-	| expandedBlocks idx result everySpot |
+	| expandedBlocks everySpot |
 	expandedBlocks := (blocks collectWithIndex: [ :x :i | (1 to: x blockSize) collect: [ :v | i - 1 ] ]) flattened asOrderedCollection.
-	idx := 0.
-	result := 0.
-	everySpot := (both withIndexCollect: [ :size :i | (1 to: size) collect: [ :x | i odd ] ]) flattened.
+	everySpot := (rawSizes withIndexCollect: [ :size :i | (1 to: size) collect: [ :x | i odd ] ]) flattened.
 	^ (everySpot withIndexCollect: [ :x :i |
 		   expandedBlocks isEmpty
 			   ifTrue: [ 0 ]
@@ -64,5 +62,5 @@ Day9Solver >> solvePart2 [
 				block position: gap position.
 				gap gapSize: gap gapSize - block blockSize.
 				gap position: gap position + block blockSize ] ] ].
-	^ (blocks collect: [ :b | (b position to: b position + b blockSize - 1) sum * b id ]) sum
+	^ (blocks collect: [ :block | (block position to: block position + block blockSize - 1) sum * block id ]) sum
 ]
