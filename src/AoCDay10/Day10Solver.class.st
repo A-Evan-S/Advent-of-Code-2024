@@ -6,8 +6,6 @@ Class {
 	#superclass : 'AoCSolver',
 	#instVars : [
 		'trailMap',
-		'numRows',
-		'numCols',
 		'trailHeads'
 	],
 	#category : 'AoCDay10',
@@ -17,7 +15,7 @@ Class {
 { #category : 'testing' }
 Day10Solver >> isPointInRange: aPoint [ 
 
-	^ aPoint > (0@0) and: aPoint <= (numRows @ numCols)
+	^ aPoint > (0@0) and: aPoint <= (trailMap numberOfRows @ trailMap numberOfColumns)
 ]
 
 { #category : 'accessing' }
@@ -55,16 +53,12 @@ Day10Solver >> parseRawData [
 
 	| temp |
 	temp := rawData lines collect: [ :row | row collect: #digitValue as: Array ].
-	numRows := temp size.
-	numCols := (temp at: 1) size.
 	trailMap := Array2D
-		            rows: numRows
-		            columns: numCols
+		            rows: temp size
+		            columns: (temp at: 1) size
 		            tabulate: [ :r :c | (temp at: r) at: c ].
 	trailHeads := OrderedCollection new.
-	1 to: numRows do: [ :r |
-		1 to: numCols do: [ :c |
-		(trailMap at: r at: c) = 0 ifTrue: [ trailHeads add: r @ c ] ] ]
+	trailMap withIndicesDo: [ :x :r : c | x = 0 ifTrue: [ trailHeads add: r @ c ] ]
 ]
 
 { #category : 'solving' }
