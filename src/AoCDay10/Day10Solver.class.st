@@ -16,6 +16,7 @@ Class {
 
 { #category : 'testing' }
 Day10Solver >> isPointInRange: aPoint [ 
+
 	^ aPoint > (0@0) and: aPoint <= (numRows @ numCols)
 ]
 
