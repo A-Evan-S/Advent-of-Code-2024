@@ -21,5 +21,5 @@ Day11SolverTest >> testSolvePart1 [
 Day11SolverTest >> testSolvePart2 [
 	| solver |
 	solver := Day11Solver newFromString: self sampleInput.
-	self assert: solver solvePart2 equals: -1
+	self assert: solver solvePart2 equals: 65601038650482
 ]
