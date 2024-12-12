@@ -83,9 +83,3 @@ Day12Region >> plots [
 
 	^ plots
 ]
-
-{ #category : 'accessing' }
-Day12Region >> plots: anObject [
-
-	plots := anObject
-]

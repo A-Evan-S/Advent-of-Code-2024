@@ -15,14 +15,15 @@ Class {
 { #category : 'parsing' }
 Day12Solver >> parseRawData [
 
-	| numRows numCols gardenLines |
-	gardenLines := rawData lines.
-	numRows := gardenLines size.
-	numCols := (gardenLines at: 1) size.
-	gardenMap := Array2D rows: numRows columns: numCols.
+	| seen region |
+	gardenMap := Array2D fromRows: (rawData lines collect: #asArray).
+	seen := Set new.
+	regions := OrderedCollection new.
 	gardenMap indicesDo: [ :r :c |
-		gardenMap at: r at: c put: ((gardenLines at: r) at: c) ].
-	self processRegions
+		(seen includes: r @ c) ifFalse: [
+			region := self processRegionWithPlot: r @ c.
+			seen addAll: region plots.
+			regions add: region ] ]
 ]
 
 { #category : 'accessing' }
@@ -43,21 +44,7 @@ Day12Solver >> processRegionWithPlot: startingPlot [
 			region addPlot: currPlot.
 			seen add: currPlot.
 			queue addAll: (self plusNeighborsOf: currPlot) ] ].
-		seen add: currPlot.
 	^ region
-]
-
-{ #category : 'processing' }
-Day12Solver >> processRegions [
-
-	| seen region |
-	seen := Set new.
-	regions := OrderedCollection new.
-	gardenMap indicesDo: [ :r :c |
-		(seen includes: r@c) ifFalse: [
-			region := self processRegionWithPlot: r@c.
-			seen addAll: region plots.
-			regions add: region ] ]
 ]
 
 { #category : 'solving' }
