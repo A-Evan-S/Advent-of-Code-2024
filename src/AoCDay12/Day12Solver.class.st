@@ -12,6 +12,19 @@ Class {
 	#package : 'AoCDay12'
 }
 
+{ #category : 'parsing' }
+Day12Solver >> parseRawData [
+
+	| numRows numCols gardenLines |
+	gardenLines := rawData lines.
+	numRows := gardenLines size.
+	numCols := (gardenLines at: 1) size.
+	gardenMap := Array2D rows: numRows columns: numCols.
+	gardenMap indicesDo: [ :r :c |
+		gardenMap at: r at: c put: ((gardenLines at: r) at: c) ].
+	self processRegions
+]
+
 { #category : 'accessing' }
 Day12Solver >> plusNeighborsOf: aPoint [ 
 	^ { aPoint + (0@1) . aPoint + (1@0) . aPoint - (0@1) . aPoint - (1@0) }
