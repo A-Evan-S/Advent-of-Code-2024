@@ -1,5 +1,5 @@
 "
-I am a solver for day 10 of Advent of Code 2024
+I am a solver for day 11 of Advent of Code 2024
 "
 Class {
 	#name : 'Day11Solver',
