@@ -1,0 +1,79 @@
+"
+I represent a claw machine with two buttons
+"
+Class {
+	#name : 'Day13Machine',
+	#superclass : 'Object',
+	#instVars : [
+		'aButton',
+		'bButton',
+		'prizeLocation',
+		'prizeLocationAlt'
+	],
+	#category : 'AoCDay13',
+	#package : 'AoCDay13'
+}
+
+{ #category : 'instance creation' }
+Day13Machine class >> newFromString: aString [
+
+	| machine re |
+	machine := self new.
+	re := '\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)' asRegex.
+	re matches: aString.
+	machine aButton: (re subexpression: 2) asNumber @ (re subexpression: 3) asNumber.
+	machine bButton: (re subexpression: 4) asNumber @ (re subexpression: 5) asNumber.
+	machine prizeLocation: (re subexpression: 6) asNumber @ (re subexpression: 7) asNumber.
+	machine prizeLocationAlt: machine prizeLocation + 10000000000000.
+	^ machine
+]
+
+{ #category : 'accessing' }
+Day13Machine >> aButton: anObject [
+
+	aButton := anObject
+]
+
+{ #category : 'accessing' }
+Day13Machine >> bButton: anObject [
+
+	bButton := anObject
+]
+
+{ #category : 'accessing' }
+Day13Machine >> prizeLocation [
+
+	^ prizeLocation
+]
+
+{ #category : 'accessing' }
+Day13Machine >> prizeLocation: anObject [
+
+	prizeLocation := anObject
+]
+
+{ #category : 'accessing' }
+Day13Machine >> prizeLocationAlt: anObject [
+
+	prizeLocationAlt := anObject
+]
+
+{ #category : 'accessing' }
+Day13Machine >> tokensToWin [
+
+	0 to: 100 do: [ :aPresses |
+		0 to: 100 do: [ :bPresses |
+			aPresses * aButton + (bPresses * bButton) = prizeLocation ifTrue: [
+				^ 3 * aPresses + bPresses ] ] ].
+	^ 0
+]
+
+{ #category : 'accessing' }
+Day13Machine >> tokensToWinAlt [
+
+	| aPresses bPresses |
+	bPresses := aButton x * prizeLocationAlt y - (aButton y * prizeLocationAlt x) / (aButton x * bButton y - (aButton y * bButton x)).
+	aPresses := prizeLocationAlt x - (bButton x * bPresses) / aButton x.
+	(aPresses isInteger and: bPresses isInteger) ifTrue: [ ^ 3 * aPresses + bPresses ].
+	^ 0
+]
