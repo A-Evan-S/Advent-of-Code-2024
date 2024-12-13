@@ -71,9 +71,9 @@ Day13Machine >> tokensToWin [
 { #category : 'accessing' }
 Day13Machine >> tokensToWinAlt [
 
-	| aPresses bPresses |
-	bPresses := aButton x * prizeLocationAlt y - (aButton y * prizeLocationAlt x) / (aButton x * bButton y - (aButton y * bButton x)).
-	aPresses := prizeLocationAlt x - (bButton x * bPresses) / aButton x.
-	(aPresses isInteger and: bPresses isInteger) ifTrue: [ ^ 3 * aPresses + bPresses ].
-	^ 0
+	| l1 l2 result |
+	l1 := GLine a: aButton x b: bButton x c: prizeLocationAlt x negated.
+	l2 := GLine a: aButton y b: bButton y c: prizeLocationAlt y negated.
+	result := (l1 intersectionsWith: l2) first asPoint.
+	^ result isIntegerPoint ifTrue: [ 3 * result x + result y ] ifFalse: [0]
 ]

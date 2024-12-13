@@ -26,11 +26,6 @@ Day12Solver >> parseRawData [
 			regions add: region ] ]
 ]
 
-{ #category : 'accessing' }
-Day12Solver >> plusNeighborsOf: aPoint [ 
-	^ { aPoint + (0@1) . aPoint + (1@0) . aPoint - (0@1) . aPoint - (1@0) }
-]
-
 { #category : 'processing' }
 Day12Solver >> processRegionWithPlot: startingPlot [
 
@@ -43,7 +38,7 @@ Day12Solver >> processRegionWithPlot: startingPlot [
 		((seen includes: currPlot) not and: (gardenMap atPoint: currPlot ifInvalid: nil) = region label) ifTrue: [
 			region addPlot: currPlot.
 			seen add: currPlot.
-			queue addAll: (self plusNeighborsOf: currPlot) ] ].
+			queue addAll: currPlot fourNeighbors ] ].
 	^ region
 ]
 
