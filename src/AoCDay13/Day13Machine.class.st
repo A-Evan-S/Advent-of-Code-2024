@@ -17,13 +17,13 @@ Class {
 { #category : 'instance creation' }
 Day13Machine class >> newFromString: aString [
 
-	| machine re |
+	| machine re nums |
 	machine := self new.
-	re := '\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)\D*(\d+)' asRegex.
-	re matches: aString.
-	machine aButton: (re subexpression: 2) asNumber @ (re subexpression: 3) asNumber.
-	machine bButton: (re subexpression: 4) asNumber @ (re subexpression: 5) asNumber.
-	machine prizeLocation: (re subexpression: 6) asNumber @ (re subexpression: 7) asNumber.
+	re := '\d+' asRegex.
+	nums := (re matchesIn: aString) collect: #asInteger.
+	machine aButton: nums first @ nums second.
+	machine bButton: nums third @ nums fourth.
+	machine prizeLocation: nums fifth @ nums sixth.
 	machine prizeLocationAlt: machine prizeLocation + 10000000000000.
 	^ machine
 ]
