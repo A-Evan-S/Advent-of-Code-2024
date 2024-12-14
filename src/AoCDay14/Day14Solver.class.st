@@ -14,6 +14,15 @@ Class {
 	#package : 'AoCDay14'
 }
 
+{ #category : 'displaying' }
+Day14Solver >> displayString [
+
+	| displayArray |
+	displayArray := (1 to: roomHeight) collect: [ :r | Array new: roomWidth withAll: $  ].
+	robots do: [ :robot | (displayArray at: robot position y + 1) at: robot position x + 1 put: $# ].
+	^ Character cr join: (displayArray collect: [:row | ' ' join: row ])
+]
+
 { #category : 'initialization' }
 Day14Solver >> initialize [
 
