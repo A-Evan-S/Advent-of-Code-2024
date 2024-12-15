@@ -70,8 +70,7 @@ Day15Solver >> canMoveDown: aPoint [
 
 	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
 	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
-	(bigMaze atPoint: aPoint) = $] ifTrue: [
-		^ self canMoveDown: aPoint - (0 @ 1) ].
+	(bigMaze atPoint: aPoint) = $] ifTrue: [ ^ self canMoveDown: aPoint - (0 @ 1) ].
 	^ (self canMoveDown: aPoint + (1 @ 0)) and: (self canMoveDown: aPoint + (1 @ 1)).
 ]
 
@@ -96,8 +95,7 @@ Day15Solver >> canMoveUp: aPoint [
 
 	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
 	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
-	(bigMaze atPoint: aPoint) = $] ifTrue: [
-		^ self canMoveUp: aPoint - (0 @ 1) ].
+	(bigMaze atPoint: aPoint) = $] ifTrue: [ ^ self canMoveUp: aPoint - (0 @ 1) ].
 	^ (self canMoveUp: aPoint + (-1 @ 0)) and: (self canMoveUp: aPoint + (-1 @ 1)).
 ]
 
@@ -120,7 +118,7 @@ Day15Solver >> makeBigMaze [
 { #category : 'moving' }
 Day15Solver >> moveDown: aPoint [
 
-	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveDown: (aPoint - (0@ 1)) ].
+	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveDown: (aPoint - (0 @ 1)) ].
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveDown: aPoint + (1 @ 0).
 	self moveDown: aPoint + (1 @ 1).
@@ -147,7 +145,7 @@ Day15Solver >> moveRight: aPoint [
 { #category : 'moving' }
 Day15Solver >> moveUp: aPoint [
 		
-	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveUp: (aPoint - (0@ 1)) ].
+	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveUp: (aPoint - (0 @ 1)) ].
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveUp: aPoint + (-1 @ 0).
 	self moveUp: aPoint + (-1 @ 1).
