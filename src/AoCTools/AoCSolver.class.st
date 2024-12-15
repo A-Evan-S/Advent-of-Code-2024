@@ -13,12 +13,16 @@ Class {
 
 { #category : 'instance creation' }
 AoCSolver class >> newFromFilename: filename [
-	^ self new rawData: filename asFileReference contents; parseRawData
+	| fixedString |
+	fixedString := String cr join: filename asFileReference contents lines.
+	^ self new rawData: fixedString; parseRawData
 ]
 
 { #category : 'instance creation' }
 AoCSolver class >> newFromString: aString [
-	^ self new rawData: aString; parseRawData
+	| fixedString |
+	fixedString := String cr join: aString lines.
+	^ self new rawData: fixedString; parseRawData
 ]
 
 { #category : 'parsing' }
