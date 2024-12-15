@@ -41,27 +41,13 @@ Day15Solver >> attemptMoveBox: boxPosition direction: delta [
 
 	| nextSpot |
 	nextSpot := maze atPoint: boxPosition + delta.
-	^ nextSpot = $.
-		  ifTrue: [
-			  maze
-				  swap: boxPosition x
-				  at: boxPosition y
-				  with: (boxPosition + delta) x
-				  at: (boxPosition + delta) y.
-			  true ]
-		  ifFalse: [
-			  nextSpot = $O
-				  ifTrue: [
-						(self attemptMoveBox: (boxPosition + delta) direction: delta ) ifTrue: [
-						maze
-				  swap: boxPosition x
-				  at: boxPosition y
-				  with: (boxPosition + delta) x
-				  at: (boxPosition + delta) y.
-			  true
-						] ifFalse: [ false ] 
-					]
-				  ifFalse: [ false ] ]
+	nextSpot = $. ifTrue: [
+		maze swap: boxPosition x at: boxPosition y with: (boxPosition + delta) x at: (boxPosition + delta) y.
+		^ true ].
+	(nextSpot = $O and: (self attemptMoveBox: boxPosition + delta direction: delta)) ifTrue: [
+		maze swap: boxPosition x at: boxPosition y with: (boxPosition + delta) x at: (boxPosition + delta) y.
+		^ true ].
+	^ false
 ]
 
 { #category : 'moving' }
@@ -118,22 +104,17 @@ Day15Solver >> canMoveUp: aPoint [
 { #category : 'generating' }
 Day15Solver >> makeBigMaze [
 
-	bigMaze := Array2D
-		           rows: maze numberOfRows
-		           columns: maze numberOfColumns * 2.
+	bigMaze := Array2D rows: maze numberOfRows columns: maze numberOfColumns * 2.
 	maze withIndicesDo: [ :v :r :c |
-		v = $#
-			ifTrue: [
+		v = $# ifTrue: [
 				bigMaze at: r at: 2 * c put: $#.
-				bigMaze at: r at: 2 * c - 1 put: $# ]
-			ifFalse: [
-				v = $.
-					ifTrue: [
-						bigMaze at: r at: 2 * c put: $..
-						bigMaze at: r at: 2 * c - 1 put: $. ]
-					ifFalse: [
-						bigMaze at: r at: 2 * c put: $].
-						bigMaze at: r at: 2 * c - 1 put: $[ ] ] ]
+				bigMaze at: r at: 2 * c - 1 put: $# ].
+		v = $. ifTrue: [
+				bigMaze at: r at: 2 * c put: $..
+				bigMaze at: r at: 2 * c - 1 put: $. ].
+		v = $O ifTrue: [
+				bigMaze at: r at: 2 * c put: $].
+				bigMaze at: r at: 2 * c - 1 put: $[ ] ]
 ]
 
 { #category : 'moving' }
@@ -143,10 +124,8 @@ Day15Solver >> moveDown: aPoint [
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveDown: aPoint + (1 @ 0).
 	self moveDown: aPoint + (1 @ 1).
-	bigMaze at: aPoint x at: aPoint y put: $..
-	bigMaze at: aPoint x at: (aPoint y + 1) put: $..
-	bigMaze at: (aPoint x + 1) at: aPoint y put: $[.
-	bigMaze at: (aPoint x + 1) at: aPoint y + 1 put: $]
+	bigMaze swap: aPoint x at: aPoint y with: aPoint x + 1 at: aPoint y.
+	bigMaze swap: aPoint x at: aPoint y + 1 with: aPoint x + 1 at: aPoint y + 1.
 ]
 
 { #category : 'moving' }
@@ -154,9 +133,7 @@ Day15Solver >> moveLeft: aPoint [
 
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifFalse: [ ^ self ].
 	self moveLeft: aPoint + (0 @ -2).
-	bigMaze at: aPoint x at: aPoint y put: $..
-	bigMaze at: aPoint x at: (aPoint y - 1) put: $].
-	bigMaze at: aPoint x at: (aPoint y - 2) put: $[
+	'.][' withIndexDo: [ :c :i | bigMaze at: aPoint x at: aPoint y - i + 1 put: c. ].
 ]
 
 { #category : 'moving' }
@@ -164,9 +141,7 @@ Day15Solver >> moveRight: aPoint [
 
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveRight: aPoint + (0 @ 2).
-	bigMaze at: aPoint x at: aPoint y put: $..
-	bigMaze at: aPoint x at: aPoint y + 1 put: $[.
-	bigMaze at: aPoint x at: aPoint y + 2 put: $]
+	'.[]' withIndexDo: [ :c :i | bigMaze at: aPoint x at: aPoint y + i - 1 put: c. ].
 ]
 
 { #category : 'moving' }
@@ -176,16 +151,13 @@ Day15Solver >> moveUp: aPoint [
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveUp: aPoint + (-1 @ 0).
 	self moveUp: aPoint + (-1 @ 1).
-	bigMaze at: aPoint x at: aPoint y put: $..
-	bigMaze at: aPoint x at: (aPoint y + 1) put: $..
-	bigMaze at: (aPoint x - 1) at: aPoint y put: $[.
-	bigMaze at: (aPoint x - 1) at: aPoint y + 1 put: $]
+	bigMaze swap: aPoint x at: aPoint y with: aPoint x - 1 at: aPoint y.
+	bigMaze swap: aPoint x at: aPoint y + 1 with: aPoint x - 1 at: aPoint y + 1.
 ]
 
 { #category : 'parsing' }
 Day15Solver >> parseRawData [
 	| mazeData instructionData |
-	rawData := String cr join: rawData lines.
 	mazeData := (rawData splitOn: (String cr , String cr)) first lines.
 	instructionData := (rawData splitOn: (String cr , String cr)) second lines.
 	instructions := '' join: instructionData.
@@ -199,12 +171,14 @@ Day15Solver >> parseRawData [
 
 { #category : 'solving' }
 Day15Solver >> solvePart1 [
+
 	instructions do: [ :instruction | self attemptMoveSelf: instruction ].
 	^ (maze withIndicesCollect: [ :v :r :c | (v = $O) ifTrue: [ 100 * (r - 1) + (c - 1) ] ifFalse: [ 0 ] ]) sum
 ]
 
 { #category : 'solving' }
 Day15Solver >> solvePart2 [
+
 	instructions do: [ :instruction | self attemptMoveBigSelf: instruction ].
 	^ (bigMaze withIndicesCollect: [ :v :r :c | (v = $[) ifTrue: [ 100 * (r - 1) + (c - 1) ] ifFalse: [ 0 ] ]) sum
 ]
