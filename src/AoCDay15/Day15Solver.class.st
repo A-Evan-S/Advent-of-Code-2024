@@ -15,40 +15,28 @@ Class {
 	#package : 'AoCDay15'
 }
 
-{ #category : 'as yet unclassified' }
-Day15Solver >> attemptMoveBigBox: boxPosition direction: delta [
-
-	| boxPos |
-	boxPos := boxPosition.
-	delta = (0 @ 1) ifTrue: [
-		(self canMoveRight: boxPos) ifTrue: [ self moveRight: boxPos. ^ true ] ].
-	delta = (0 @ -1) ifTrue: [
-		(self canMoveLeft: boxPos) ifTrue: [ self moveLeft: boxPos. ^ true ] ].
-	((bigMaze atPoint: boxPos) = $]) ifTrue: [ boxPos := boxPos - (0 @ 1) ].
-	delta = (1 @ 0) ifTrue: [
-		(self canMoveDown: boxPos) ifTrue: [ self moveDown: boxPos. ^ true ] ].
-	delta = (-1 @ 0) ifTrue: [
-		(self canMoveUp: boxPos) ifTrue: [ self moveUp: boxPos. ^ true ] ].
-
-	^ false
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'moving' }
 Day15Solver >> attemptMoveBigSelf: direction [
 
-	| delta deltas nextSpot |
-	deltas := Dictionary newFromPairs: { $>. (0 @ 1). $<. (0 @ -1). $^. (-1 @ 0). $v. (1 @ 0) }.
-	delta := deltas at: direction.
-	nextSpot := bigMaze atPoint: bigPosition + delta.
-	nextSpot = $.
-		ifTrue: [ bigPosition := bigPosition + delta ]
-		ifFalse: [
-			nextSpot = $# ifFalse: [
-				(self attemptMoveBigBox: bigPosition + delta direction: delta)
-					ifTrue: [ bigPosition := bigPosition + delta ] ] ]
+	direction = $< ifTrue: [
+		(self canMoveLeft: bigPosition - (0 @ 1)) ifTrue: [
+			self moveLeft: bigPosition - (0 @ 1).
+			bigPosition := bigPosition - (0 @ 1) ] ].
+	direction = $> ifTrue: [
+		(self canMoveRight: bigPosition + (0 @ 1)) ifTrue: [
+			self moveRight: bigPosition + (0 @ 1).
+			bigPosition := bigPosition + (0 @ 1) ] ].
+	direction = $v ifTrue: [
+		(self canMoveDown: bigPosition + (1 @ 0)) ifTrue: [
+			self moveDown: bigPosition + (1 @ 0).
+			bigPosition := bigPosition + (1 @ 0) ] ].
+	direction = $^ ifTrue: [
+		(self canMoveUp: bigPosition - (1 @ 0)) ifTrue: [
+			self moveUp: bigPosition - (1 @ 0).
+			bigPosition := bigPosition - (1 @ 0) ] ].
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'moving' }
 Day15Solver >> attemptMoveBox: boxPosition direction: delta [
 
 	| nextSpot |
@@ -76,107 +64,81 @@ Day15Solver >> attemptMoveBox: boxPosition direction: delta [
 				  ifFalse: [ false ] ]
 ]
 
-{ #category : 'as yet unclassified' }
-Day15Solver >> attemptMoveSelf: direction [ 
+{ #category : 'moving' }
+Day15Solver >> attemptMoveSelf: direction [
+
 	| delta deltas nextSpot |
-	deltas := Dictionary newFromPairs: { $> . 0@1 . $< . 0 @ -1 . $^ . -1 @ 0 . $v . 1 @ 0 }.
+	deltas := Dictionary newFromPairs: { $> . (0 @ 1) . $< . (0 @ -1) . $^ . (-1 @ 0) . $v . (1 @ 0) }.
 	delta := deltas at: direction.
-	nextSpot := maze atPoint: (currentPosition + delta).
-	(nextSpot = $.) ifTrue: [
-		currentPosition := currentPosition + delta.
-	] ifFalse: [ (nextSpot = $O) ifTrue: [
-		(self attemptMoveBox: (currentPosition + delta) direction: delta) ifTrue: [ currentPosition := currentPosition + delta. ].
-	]. ].
-	
+	nextSpot := currentPosition + delta.
+	(maze atPoint: nextSpot) = $.
+		ifTrue: [ currentPosition := currentPosition + delta ]
+		ifFalse: [
+			(maze atPoint: nextSpot) = $O ifTrue: [
+				(self attemptMoveBox: currentPosition + delta direction: delta)
+					ifTrue: [ currentPosition := currentPosition + delta ] ] ]
 ]
 
 { #category : 'testing' }
 Day15Solver >> canMoveDown: aPoint [
-	| leftPos rightPos leftHalf rightHalf|
-	leftPos := bigMaze atPoint: (aPoint + (1@0)).
-	rightPos := bigMaze atPoint: (aPoint + (1@1)).
-	leftHalf := (leftPos = $.) ifTrue: [ true ] ifFalse: [
-	(leftPos = $#) ifTrue: [ false ] ifFalse: [
-	(leftPos = $[) ifTrue: [ self canMoveDown: (aPoint + (1@0)) ] ifFalse: [
-		self canMoveDown: (aPoint + (1@ -1))
-	].
-	].
-	].
 
-		rightHalf := (rightPos = $.) ifTrue: [ true ] ifFalse: [
-	(rightPos = $#) ifTrue: [ false ] ifFalse: [
-	(rightPos = $[) ifTrue: [ self canMoveDown: (aPoint + (1@1)) ] ifFalse: [
-		self canMoveDown: (aPoint + (1@ 0))
-	].
-	].
-	].
-	^ leftHalf & rightHalf
+	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
+	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
+	(bigMaze atPoint: aPoint) = $] ifTrue: [
+		^ self canMoveDown: aPoint - (0 @ 1) ].
+	^ (self canMoveDown: aPoint + (1 @ 0)) and: (self canMoveDown: aPoint + (1 @ 1)).
 ]
 
 { #category : 'testing' }
 Day15Solver >> canMoveLeft: aPoint [ 
-	"always called on ] block"
-	| nextPos |
-	nextPos := bigMaze atPoint: (aPoint + (0@ -2)).
-	^ (nextPos = $#) ifTrue: [ false ] ifFalse: [
-		(nextPos = $.) ifTrue: [ true ] ifFalse: [
-		self canMoveLeft: (aPoint + (0@ -2))
-		]
-		]
+
+	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
+	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
+	^ self canMoveLeft: aPoint + (0 @ -2).
 ]
 
 { #category : 'testing' }
 Day15Solver >> canMoveRight: aPoint [
-	"always called on [ block"
-	| nextPos |
-	nextPos := bigMaze atPoint: (aPoint + (0@2)).
-	^ (nextPos = $#) ifTrue: [ false ] ifFalse: [
-		(nextPos = $.) ifTrue: [ true ] ifFalse: [
-		self canMoveRight: (aPoint + (0@2))
-		]
-		]
+
+	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
+	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
+	^ self canMoveRight: aPoint + (0 @ 2).
 ]
 
 { #category : 'testing' }
 Day15Solver >> canMoveUp: aPoint [
-	"always called on [ block"
-	| leftPos rightPos leftHalf rightHalf|
-	leftPos := bigMaze atPoint: (aPoint + (-1@0)).
-	rightPos := bigMaze atPoint: (aPoint + (-1@1)).
-	
-	leftHalf := (leftPos = $.) ifTrue: [ true ] ifFalse: [
-	(leftPos = $#) ifTrue: [ false ] ifFalse: [
-	(leftPos = $[) ifTrue: [ self canMoveUp: (aPoint + (-1@0)) ] ifFalse: [
-		self canMoveUp: (aPoint + (-1@ -1))
-	].
-	].
-	].
 
-	rightHalf := (rightPos = $.) ifTrue: [ true ] ifFalse: [
-	(rightPos = $#) ifTrue: [ false ] ifFalse: [
-	(rightPos = $[) ifTrue: [ self canMoveUp: (aPoint + (-1@1)) ] ifFalse: [
-		self canMoveUp: (aPoint + (-1@ 0))
-	].
-	].
-	].
-	^ leftHalf & rightHalf 
+	(bigMaze atPoint: aPoint) = $. ifTrue: [ ^ true ].
+	(bigMaze atPoint: aPoint) = $# ifTrue: [ ^ false ].
+	(bigMaze atPoint: aPoint) = $] ifTrue: [
+		^ self canMoveUp: aPoint - (0 @ 1) ].
+	^ (self canMoveUp: aPoint + (-1 @ 0)) and: (self canMoveUp: aPoint + (-1 @ 1)).
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'generating' }
 Day15Solver >> makeBigMaze [
-	bigMaze := Array2D rows: (maze numberOfRows) columns: (maze numberOfColumns * 2).
+
+	bigMaze := Array2D
+		           rows: maze numberOfRows
+		           columns: maze numberOfColumns * 2.
 	maze withIndicesDo: [ :v :r :c |
-		(v = $#) ifTrue: [ bigMaze at: r at: (2*c) put: $#. bigMaze at: r at: (2*c-1) put: $#. ] ifFalse: [
-		(v = $.) ifTrue: [ bigMaze at: r at: (2*c) put: $.. bigMaze at: r at: (2*c-1) put: $.. ] ifFalse: [
-		bigMaze at: r at: (2*c) put: $]. bigMaze at: r at: (2*c-1) put: $[.
-		].
-		].
-	].
+		v = $#
+			ifTrue: [
+				bigMaze at: r at: 2 * c put: $#.
+				bigMaze at: r at: 2 * c - 1 put: $# ]
+			ifFalse: [
+				v = $.
+					ifTrue: [
+						bigMaze at: r at: 2 * c put: $..
+						bigMaze at: r at: 2 * c - 1 put: $. ]
+					ifFalse: [
+						bigMaze at: r at: 2 * c put: $].
+						bigMaze at: r at: 2 * c - 1 put: $[ ] ] ]
 ]
 
-{ #category : 'reordering' }
+{ #category : 'moving' }
 Day15Solver >> moveDown: aPoint [
-	"always called on ["
+
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveDown: (aPoint - (0@ 1)) ].
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveDown: aPoint + (1 @ 0).
@@ -187,7 +149,7 @@ Day15Solver >> moveDown: aPoint [
 	bigMaze at: (aPoint x + 1) at: aPoint y + 1 put: $]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'moving' }
 Day15Solver >> moveLeft: aPoint [ 
 
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifFalse: [ ^ self ].
@@ -197,7 +159,7 @@ Day15Solver >> moveLeft: aPoint [
 	bigMaze at: aPoint x at: (aPoint y - 2) put: $[
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'moving' }
 Day15Solver >> moveRight: aPoint [
 
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
@@ -207,9 +169,9 @@ Day15Solver >> moveRight: aPoint [
 	bigMaze at: aPoint x at: aPoint y + 2 put: $]
 ]
 
-{ #category : 'keyboard control' }
+{ #category : 'moving' }
 Day15Solver >> moveUp: aPoint [
-	"always called on ["
+		
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $] ifTrue: [ ^ self moveUp: (aPoint - (0@ 1)) ].
 	(bigMaze atPoint: aPoint ifInvalid: $#) = $[ ifFalse: [ ^ self ].
 	self moveUp: aPoint + (-1 @ 0).
