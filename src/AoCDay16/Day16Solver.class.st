@@ -14,22 +14,22 @@ Class {
 	#package : 'AoCDay16'
 }
 
-{ #category : 'accessing' }
-Day16Solver >> endPositions [
+{ #category : 'as yet unclassified' }
+Day16Solver >> directionToDelta: anInteger [
 
-	^ (0 to: 3)
-		  collect: [ :z | G3DCoordinates x: end x y: end y z: z ]
-		  thenSelect: [ :endPos | costs includesKey: endPos ]
+	^ { (0 @ 1). (1 @ 0). (0 @ -1). (-1 @ 0) } at: anInteger + 1
 ]
 
 { #category : 'accessing' }
-Day16Solver >> getBackwards: currPos [ 
+Day16Solver >> endPositions [
 
-	^ (Dictionary newFromPairs: {
-		0 . currPos + (0@ -1 @ 0) .
-		1 . currPos + (-1@ 0 @ 0) .
-		2 . currPos + (0@ 1 @ 0) .
-		3 . currPos + (1@ 0 @ 0) }) at: currPos z.
+	^ (0 to: 3) collect: [ :z | end @ z ] thenSelect: [ :endPos | costs includesKey: endPos ]
+]
+
+{ #category : 'accessing' }
+Day16Solver >> getBackwards: currPos [
+
+	^ currPos - ((self directionToDelta: currPos z) @ 0)
 ]
 
 { #category : 'accessing' }
@@ -41,20 +41,10 @@ Day16Solver >> getLeft: currPos [
 { #category : 'accessing' }
 Day16Solver >> getPossiblePositions: currPos [
 
-	| nextPositions |
+	| nextPositions delta |
 	nextPositions := OrderedCollection new.
-	currPos z = 0 ifTrue: [
-		((maze atPoint: currPos x @ currPos y + (0 @ 1)) = $.) ifTrue: [ nextPositions add: currPos + (0@1@0) ].
-	 ].
-	currPos z = 1 ifTrue: [
-		((maze atPoint: currPos x @ currPos y + (1 @ 0)) = $.) ifTrue: [ nextPositions add: currPos + (1@0@0) ].
-	].
-	currPos z = 2 ifTrue: [
-		((maze atPoint: currPos x @ currPos y + (0 @ -1)) = $.) ifTrue: [ nextPositions add: currPos + (0@ -1 @ 0) ].
-	].
-	currPos z = 3 ifTrue: [
-		((maze atPoint: currPos x @ currPos y + (-1 @ 0)) = $.) ifTrue: [ nextPositions add: currPos + (-1@0@0) ].
-	].
+	delta := self directionToDelta: currPos z.
+	(maze atPoint: (currPos x @ currPos y) + delta) = $. ifTrue: [ nextPositions add: currPos + (delta @ 0) ].
 	nextPositions add: (G3DCoordinates x: currPos x y: currPos y z: currPos z + 1 % 4).
 	nextPositions add: (G3DCoordinates x: currPos x y: currPos y z: currPos z - 1 % 4).
 	^ nextPositions
