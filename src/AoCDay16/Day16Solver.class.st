@@ -14,7 +14,7 @@ Class {
 	#package : 'AoCDay16'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 Day16Solver >> directionToDelta: anInteger [
 
 	^ { (0 @ 1). (1 @ 0). (0 @ -1). (-1 @ 0) } at: anInteger + 1
