@@ -39,7 +39,7 @@ Day16Solver >> getLeft: currPos [
 ]
 
 { #category : 'accessing' }
-Day16Solver >> getPossiblePositions: currPos [
+Day16Solver >> getNeighbors: currPos [
 
 	| nextPositions delta |
 	nextPositions := OrderedCollection new.
@@ -67,7 +67,7 @@ Day16Solver >> getPreviousNeighbors: currPos [
 { #category : 'accessing' }
 Day16Solver >> getRight: currPos [ 
 	
-	^ G3DCoordinates x: currPos x y: currPos y z: currPos z + 1 % 4
+	^ currPos x @ currPos y @ (currPos z + 1 % 4)
 ]
 
 { #category : 'parsing' }
@@ -87,17 +87,15 @@ Day16Solver >> parseRawData [
 { #category : 'solving' }
 Day16Solver >> solvePart1 [
 
-	| queue currPos newCost visited startingPos |
-	visited := Set new.
+	| queue currPos newCost startingPos |
 	queue := Heap sortBlock: [ :pos1 :pos2 | (costs at: pos1) < (costs at: pos2) ].
 	startingPos := start x @ start y @ 0.
 	costs at: startingPos put: 0.
 	queue add: startingPos.
 	[ queue isNotEmpty ] whileTrue: [
 		currPos := queue removeFirst.
-		visited add: currPos.
-		(self getPossiblePositions: currPos)
-			select: [ :nextPos | (visited includes: nextPos) not ]
+		(self getNeighbors: currPos)
+			select: [ :nextPos | (costs includesKey: nextPos) not ]
 			thenDo: [ :nextPos |
 				newCost := currPos z = nextPos z
 					           ifTrue: [ (costs at: currPos) + 1 ]
