@@ -94,15 +94,11 @@ Day16Solver >> solvePart1 [
 	queue add: startingPos.
 	[ queue isNotEmpty ] whileTrue: [
 		currPos := queue removeFirst.
-		(self getNeighbors: currPos)
-			select: [ :nextPos | (costs includesKey: nextPos) not ]
-			thenDo: [ :nextPos |
-				newCost := currPos z = nextPos z
-					           ifTrue: [ (costs at: currPos) + 1 ]
-					           ifFalse: [ (costs at: currPos) + 1000 ].
-				((costs includesKey: nextPos) not or: [ (costs at: nextPos) > newCost ]) ifTrue: [
-					costs at: nextPos put: newCost.
-					queue add: nextPos ] ] ].
+		(self getNeighbors: currPos) do: [ :nextPos |
+			newCost := (costs at: currPos) + (currPos z = nextPos z ifTrue: [ 1 ] ifFalse: [ 1000 ]).
+			(costs at: nextPos ifAbsent: [ Float infinity ]) > newCost ifTrue: [
+				costs at: nextPos put: newCost.
+				queue add: nextPos ] ] ].
 	^ (self endPositions collect: [ :endPos | costs at: endPos ]) min
 ]
 
