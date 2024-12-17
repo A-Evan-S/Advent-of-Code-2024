@@ -70,14 +70,14 @@ Day17Computer >> step [
 	literal := program at: (ip + 1).
 	combo := { 0 . 1 . 2 . 3 . a . b . c } at: ((program at: (ip + 1)) + 1).
 	operations := Dictionary newFromPairs: {
-		0 . [ a := a // (2 ** combo) ] .
+		0 . [ a := a >> combo ] .
 		1 . [ b := b bitXor: literal ] .
 		2 . [ b := combo % 8 ] .
 		3 . [ a ~= 0 ifTrue: [ ip := literal - 1 ] ] .
 		4 . [ b := b bitXor: c ] .
 		5 . [ output add: combo % 8 ] .
-		6 . [ b := a // (2 ** combo) ] .
-		7 . [ c := a // (2 ** combo) ]
+		6 . [ b := a >> combo ] .
+		7 . [ c := a >> combo ]
 	}.
 	(operations at: opcode) value.
 	ip := ip + 2
