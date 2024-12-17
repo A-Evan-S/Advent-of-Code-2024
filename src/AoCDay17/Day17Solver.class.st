@@ -35,16 +35,16 @@ Day17Solver >> runComputer: aStart [
 ]
 
 { #category : 'solving' }
-Day17Solver >> solve2Helper: aCurr finished: n [
+Day17Solver >> solve2Helper: a finished: n [
 
-	| tmp p cont |
-	n = program size ifTrue: [ ^ aCurr ].
-	p := program at: program size - n.
-	0 to: 7 do: [ :t |
-		tmp := self runComputer: aCurr << 3 + t.
-		tmp first = p ifTrue: [
-			cont := self solve2Helper: aCurr << 3 + t finished: n + 1.
-			cont > 0 ifTrue: [ ^ cont ] ] ].
+	| output target recResult |
+	n = program size ifTrue: [ ^ a ].
+	target := program at: program size - n.
+	0 to: 7 do: [ :x |
+		output := self runComputer: a << 3 + x.
+		output first = target ifTrue: [
+			recResult := self solve2Helper: a << 3 + x finished: n + 1.
+			recResult > 0 ifTrue: [ ^ recResult ] ] ].
 	^ 0
 ]
 
