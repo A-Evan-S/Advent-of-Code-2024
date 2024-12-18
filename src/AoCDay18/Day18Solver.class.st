@@ -42,13 +42,14 @@ Day18Solver >> pathLengthWithFallen: fallen [
 	queue := { 0 @ 0 } asOrderedCollection.
 	[ queue isNotEmpty ] whileTrue: [
 		currPos := queue removeFirst.
+		(currPos = (gridSize @ gridSize)) ifTrue: [ ^ steps at: currPos ].
 		currPos fourNeighbors
 			select: [ :neighbor | self validPosition: neighbor withFallen: fallen ]
 			thenDo: [ :neighbor |
 				(steps includesKey: neighbor) ifFalse: [
 					steps at: neighbor put: (steps at: currPos) + 1.
 					queue add: neighbor ] ] ].
-	^ steps at: gridSize @ gridSize ifAbsent: 0
+	^ 0
 ]
 
 { #category : 'solving' }
@@ -68,7 +69,7 @@ Day18Solver >> solvePart2 [
 		(self pathLengthWithFallen: (bytes first: mid)) = 0
 			ifTrue: [ upper := mid - 1 ]
 			ifFalse: [ lower := mid + 1 ] ].
-	^ bytes at: lower
+	^ '{1},{2}' format: {(bytes at: lower) x . (bytes at: lower) y}
 ]
 
 { #category : 'validating' }

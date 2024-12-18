@@ -13,22 +13,17 @@ Class {
 }
 
 { #category : 'testing' }
-Day10Solver >> isPointInRange: aPoint [ 
+Day10Solver >> isPointInRange: aPoint [
 
-	^ aPoint > (0@0) and: aPoint <= (trailMap numberOfRows @ trailMap numberOfColumns)
+	^ aPoint between: 1 @ 1 and: trailMap extent
 ]
 
 { #category : 'accessing' }
 Day10Solver >> neighborsOf: aPoint [
 
-	| neighbors height |
+	| height |
 	height := trailMap atPoint: aPoint.
-	neighbors := {
-		             (aPoint + (1 @ 0)).
-		             (aPoint + (0 @ 1)).
-		             (aPoint - (1 @ 0)).
-		             (aPoint - (0 @ 1)) }.
-	^ neighbors select: [ :p | (self isPointInRange: p) and: [ (trailMap atPoint: p) = (height + 1) ] ]
+	^ aPoint fourNeighbors select: [ :p | (self isPointInRange: p) and: [ (trailMap atPoint: p) = (height + 1) ] ]
 ]
 
 { #category : 'accessing' }

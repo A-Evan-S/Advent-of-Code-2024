@@ -50,5 +50,5 @@ Day18SolverTest >> testSolvePart2 [
 
 	| solver |
 	solver := (Day18Solver newFromString: self sampleInput) gridSize: 6; part1Size: 12.
-	self assert: solver solvePart2 equals: (6@1)
+	self assert: solver solvePart2 equals: '6,1'
 ]
