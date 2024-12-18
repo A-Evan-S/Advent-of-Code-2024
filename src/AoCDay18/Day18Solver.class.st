@@ -35,9 +35,10 @@ Day18Solver >> part1Size: anInteger [
 ]
 
 { #category : 'solving' }
-Day18Solver >> pathLengthWithFallen: fallen [
+Day18Solver >> pathLengthWithFallen: fallenCount [
 
-	| steps queue currPos |
+	| steps queue currPos fallen |
+	fallen := (bytes first: fallenCount) asSet.
 	steps := Dictionary newFromPairs: { 0@0 . 0 }.
 	queue := { 0 @ 0 } asOrderedCollection.
 	[ queue isNotEmpty ] whileTrue: [
@@ -55,7 +56,7 @@ Day18Solver >> pathLengthWithFallen: fallen [
 { #category : 'solving' }
 Day18Solver >> solvePart1 [
 
-	^ self pathLengthWithFallen: (bytes first: part1Size)
+	^ self pathLengthWithFallen: part1Size
 ]
 
 { #category : 'solving' }
@@ -66,7 +67,7 @@ Day18Solver >> solvePart2 [
 	upper := bytes size.
 	[ lower < upper ] whileTrue: [
 		mid := upper + lower // 2.
-		(self pathLengthWithFallen: (bytes first: mid)) = 0
+		(self pathLengthWithFallen: mid) = 0
 			ifTrue: [ upper := mid - 1 ]
 			ifFalse: [ lower := mid + 1 ] ].
 	^ '{1},{2}' format: {(bytes at: lower) x . (bytes at: lower) y}
