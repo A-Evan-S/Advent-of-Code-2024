@@ -14,33 +14,31 @@ Class {
 }
 
 { #category : 'solving' }
-Day19Solver >> canBuild: aString [ 
+Day19Solver >> canBuild: design [
 
-	| options |
-	(aString isEmpty) ifTrue: [ ^ true ].
-	options := patterns select: [ :pattern | aString beginsWith: pattern ].
-	^ options anySatisfy: [ :option | self canBuild: (aString allButFirst: (option size)) ]
+	design ifEmpty: [ ^ true ].
+	^ (patterns select: [ :pattern | design beginsWith: pattern ])
+		  anySatisfy: [ :pattern | self canBuild: (design allButFirst: pattern size) ]
 ]
 
 { #category : 'solving' }
-Day19Solver >> countBuilds: aString [
+Day19Solver >> countBuilds: design [
 
-	| options ans |
-	(cache includesKey: aString) ifTrue: [ ^ cache at: aString ].
-	aString isEmpty ifTrue: [ ^ 1 ].
-	options := patterns select: [ :pattern | aString beginsWith: pattern ].
-	ans := (options collect: [ :option |
-		        self countBuilds: (aString allButFirst: option size) ])
-		       inject: 0
-		       into: [ :a :b | a + b ].
-	cache at: aString put: ans.
+	| ans |
+	design ifEmpty: [ ^ 1 ].
+	(cache includesKey: design) ifTrue: [ ^ cache at: design ].
+	ans := ((patterns select: [ :pattern | design beginsWith: pattern ])
+		        collect: [ :option |
+		        self countBuilds: (design allButFirst: option size) ])
+		       sumNumbers.
+	cache at: design put: ans.
 	^ ans
 ]
 
 { #category : 'initialization' }
 Day19Solver >> initialize [
 
-	cache := Dictionary new.
+	cache := Dictionary new
 ]
 
 { #category : 'parsing' }
@@ -53,7 +51,7 @@ Day19Solver >> parseRawData [
 { #category : 'solving' }
 Day19Solver >> solvePart1 [
 
-	^ (designs select: [ :design | self canBuild: design ]) size
+	^ designs count: [ :design | self canBuild: design ]
 ]
 
 { #category : 'solving' }
