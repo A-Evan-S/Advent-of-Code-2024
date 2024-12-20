@@ -17,21 +17,19 @@ Class {
 	#package : 'AoCDay20'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'building' }
 Day20Solver >> buildEndDistance [
 
 	| curr dist |
 	endDistance := Dictionary new.
-	curr := Set new.
-	curr add: endPos.
+	curr := Set newFrom: { endPos }.
 	dist := 0.
-
 	[ curr isEmpty ] whileFalse: [
 		curr do: [ :pos | endDistance at: pos put: dist ].
 		dist := dist + 1.
-		curr := ((curr flatCollect: [ :pos | pos fourNeighbors ]) select: [
-			         :pos | self canMove: pos ]) reject: [ :pos |
-			        endDistance includesKey: pos ] ]
+		curr := ((curr flatCollect: [ :pos | pos fourNeighbors ])
+			select: [ :pos | self canMove: pos ]) 
+			reject: [ :pos | endDistance includesKey: pos ] ]
 ]
 
 { #category : 'testing' }
@@ -46,33 +44,27 @@ Day20Solver >> goal: anObject [
 	goal := anObject
 ]
 
-{ #category : 'as yet unclassified' }
-Day20Solver >> neighborsOf: aPoint distance: anInteger [
+{ #category : 'accessing' }
+Day20Solver >> neighborsOf: aPoint distance: dist [
 
 	| neighbors |
-	neighbors := OrderedCollection new.
-	(aPoint x - anInteger) to: (aPoint x + anInteger) do: [ :r |
-		(aPoint y - anInteger) to: (aPoint y + anInteger) do: [ :c |
-			((self canMove: r @ c ) and: [ (aPoint manhattanDistanceTo: (r @ c)) <= anInteger ]) ifTrue: [ neighbors add: r @ c].
-	] ].
-	^ neighbors
+	neighbors := (aPoint x - dist to: aPoint x + dist) flatCollect: [ :r |
+		             (aPoint y - dist to: aPoint y + dist) collect: [ :c | r @ c ] ].
+	^ neighbors select: [ :pos | (self canMove: pos) and: [ (aPoint manhattanDistanceTo: pos) <= dist ] ]
 ]
 
 { #category : 'parsing' }
 Day20Solver >> parseRawData [
 
-	| lines val |
-	lines := rawData lines.
-	height := lines size.
-	width := (lines at: 1) size.
+	height := rawData lines size.
+	width := (rawData lines at: 1) size.
 	walls := Set new.
-	1 to: height do: [ :r |
-		1 to: width do: [ :c |
-			val := (lines at: r) at: c.
+	rawData lines withIndexDo: [ :row :r |
+		row withIndexDo: [ :val :c |
 			val = $# ifTrue: [ walls add: r @ c ].
 			val = $S ifTrue: [ startPos := r @ c ].
 			val = $E ifTrue: [ endPos := r @ c ] ] ].
-	self buildEndDistance.
+	self buildEndDistance
 ]
 
 { #category : 'solving' }
@@ -87,21 +79,16 @@ Day20Solver >> solvePart2 [
 	^ self solveWithJumpSize: 20
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'solving' }
 Day20Solver >> solveWithJumpSize: jumpSize [
 
-	| currPos count seen neighbors cheatValues cheatCounts |
-	currPos := startPos.
-	count := 0.
-	seen := Set new.
-	cheatCounts := Dictionary new.
-	[ currPos ~= endPos ] whileTrue: [
-		seen add: currPos.
-		neighbors := self neighborsOf: currPos distance: jumpSize.
-		cheatValues := neighbors collect: [ :jumpTo | (endDistance at: currPos) - (endDistance at: jumpTo) - (currPos manhattanDistanceTo: jumpTo) ].
-		count := count  + (cheatValues count: [ :cheatVal | cheatVal >= goal ]).
-		currPos := (currPos fourNeighbors select: [ :pos | (self canMove: pos) and: [ (seen includes: pos) not ] ]) first.
-		].
-
-	^ count
+	| cheatValues jumpStarts |
+	jumpStarts := (1 to: height) flatCollect: [ :r | (1 to: width) collect: [ :c | r @ c ] ].
+	jumpStarts := jumpStarts select: [ :pos | self canMove: pos ].
+	cheatValues := jumpStarts flatCollect: [ :jumpStart |
+		               (self neighborsOf: jumpStart distance: jumpSize) collect: [ :jumpEnd |
+				               (endDistance at: jumpStart)
+				               - (endDistance at: jumpEnd)
+				               - (jumpStart manhattanDistanceTo: jumpEnd) ] ].
+	^ cheatValues count: [ :cheatVal | cheatVal >= goal ]
 ]
