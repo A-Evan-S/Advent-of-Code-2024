@@ -11,21 +11,35 @@ Class {
 { #category : 'test data' }
 Day20SolverTest >> sampleInput [
 
-	^ ''
+	^ '###############
+#...#...#.....#
+#.#.#.#.#.###.#
+#S#...#.#.#...#
+#######.#.#.###
+#######.#.#...#
+#######.#.###.#
+###..E#...#...#
+###.#######.###
+#...###...#...#
+#.#####.#.###.#
+#.#...#.#.#...#
+#.#.#.#.#.#.###
+#...#...#...###
+###############'
 ]
 
 { #category : 'tests' }
 Day20SolverTest >> testSolvePart1 [
 
 	| solver |
-	solver := Day20Solver newFromString: self sampleInput.
-	self assert: solver solvePart1 equals: 0
+	solver := (Day20Solver newFromString: self sampleInput) goal: 10.
+	self assert: solver solvePart1 equals: 10
 ]
 
 { #category : 'tests' }
 Day20SolverTest >> testSolvePart2 [
 
 	| solver |
-	solver := Day20Solver newFromString: self sampleInput.
-	self assert: solver solvePart2 equals: 0
+	solver := (Day20Solver newFromString: self sampleInput) goal: 50.
+	self assert: solver solvePart2 equals: 285
 ]
