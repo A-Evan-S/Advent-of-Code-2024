@@ -5,8 +5,7 @@ Class {
 	#name : 'Day21Solver',
 	#superclass : 'AoCSolver',
 	#instVars : [
-		'codes',
-		'cache'
+		'codes'
 	],
 	#category : 'AoCDay21',
 	#package : 'AoCDay21'
@@ -22,11 +21,6 @@ Day21Solver >> complexityOf: code withDirectionalPadCount: n [
 	sequenceLengths := numericSequences collect: [ :seq | directionPad fullPathCost: seq withLayers: n ].
 	numPart := code allButLast asInteger.
 	^ sequenceLengths min * numPart
-]
-
-{ #category : 'initialization' }
-Day21Solver >> initialize [
-	cache := Dictionary new.
 ]
 
 { #category : 'parsing' }
