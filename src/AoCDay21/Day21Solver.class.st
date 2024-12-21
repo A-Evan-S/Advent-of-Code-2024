@@ -25,15 +25,18 @@ Day21Solver >> complexityOf: code withDirectionalPadCount: n [
 
 { #category : 'parsing' }
 Day21Solver >> parseRawData [
+
 	codes := rawData lines
 ]
 
 { #category : 'solving' }
 Day21Solver >> solvePart1 [
+
 	^ (codes collect: [ :code | self complexityOf: code withDirectionalPadCount: 2 ]) sum
 ]
 
 { #category : 'solving' }
 Day21Solver >> solvePart2 [
+
 	^ (codes collect: [ :code | self complexityOf: code withDirectionalPadCount: 25 ]) sum
 ]

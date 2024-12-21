@@ -59,6 +59,7 @@ Day21Keypad >> fullPathOptions: code [
 
 { #category : 'initialization' }
 Day21Keypad >> initialize [
+
 	cache := Dictionary new.
 ]
 
