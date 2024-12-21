@@ -1,4 +1,4 @@
-"
+I'm"
 A generic keypad with methods for finding paths and pathlengths.
 "
 Class {
@@ -14,13 +14,13 @@ Class {
 }
 
 { #category : 'solving' }
-Day21Keypad >> costFrom: start to: direction withLayers: layers [
+Day21Keypad >> costFrom: key1 to: key2 withLayers: layers [
 
    | paths key costs |
-   key := '' join: { start . direction . layers }.
+   key := '' join: { key1 . key2 . layers }.
    (cache includesKey: key) ifTrue: [ ^ cache at: key ].
    layers = 0 ifTrue: [ ^ 1 ].
-   paths := self pathsFrom: start to: direction.
+   paths := self pathsFrom: key1 to: key2.
 	costs := paths collect: [ :path | self fullPathCost: path withLayers: layers - 1 ].
    cache at: key put: costs asOrderedCollection min.
    ^ costs min
