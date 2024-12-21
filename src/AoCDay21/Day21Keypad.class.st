@@ -1,5 +1,5 @@
-I'm"
-A generic keypad with methods for finding paths and pathlengths.
+"
+I am a generic keypad with methods for finding paths and pathlengths.
 "
 Class {
 	#name : 'Day21Keypad',
