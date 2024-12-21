@@ -57,11 +57,6 @@ Day21Keypad >> fullPathOptions: code [
    ^ buttonOptions asOrderedCollection
 ]
 
-{ #category : 'initialization' }
-Day21Keypad >> initialize [
-	cache := Dictionary new.
-]
-
 { #category : 'accessing' }
 Day21Keypad >> isSafePath: path startingAt: aPoint [
 
