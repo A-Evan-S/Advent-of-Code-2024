@@ -32,11 +32,11 @@ Day21Solver >> parseRawData [
 { #category : 'solving' }
 Day21Solver >> solvePart1 [
 
-	^ (codes collect: [ :code | self complexityOf: code withDirectionalPadCount: 2 ]) sum
+	^ codes collectAndSum: [ :code | self complexityOf: code withDirectionalPadCount: 2 ]
 ]
 
 { #category : 'solving' }
 Day21Solver >> solvePart2 [
 
-	^ (codes collect: [ :code | self complexityOf: code withDirectionalPadCount: 25 ]) sum
+	^ codes collectAndSum: [ :code | self complexityOf: code withDirectionalPadCount: 25 ]
 ]
