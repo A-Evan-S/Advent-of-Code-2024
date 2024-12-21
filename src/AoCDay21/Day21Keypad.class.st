@@ -16,14 +16,12 @@ Class {
 { #category : 'solving' }
 Day21Keypad >> costFrom: key1 to: key2 withLayers: layers [
 
-   | paths key costs |
-   key := '' join: { key1 . key2 . layers }.
-   (cache includesKey: key) ifTrue: [ ^ cache at: key ].
-   layers = 0 ifTrue: [ ^ 1 ].
-   paths := self pathsFrom: key1 to: key2.
-	costs := paths collect: [ :path | self fullPathCost: path withLayers: layers - 1 ].
-   cache at: key put: costs asOrderedCollection min.
-   ^ costs min
+   | paths costs |
+   ^ cache at: ('' join: { key1. key2. layers }) ifAbsentPut: [
+        layers = 0 ifTrue: [ ^ 1 ].
+        paths := self pathsFrom: key1 to: key2.
+        costs := paths collect: [ :path | self fullPathCost: path withLayers: layers - 1 ].
+        costs min ]
 ]
 
 { #category : 'accessing' }
