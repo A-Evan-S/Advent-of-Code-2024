@@ -37,7 +37,7 @@ Day22Solver >> solvePart2 [
       prng := Day22PRNG new startingNumber: startingNum.
       prng next; next; next; next.
 		1996 timesRepeat: [ 
-			key := prng deltaHistory asString.
+			key := prng deltaHistory.
          sums at: key put: (sums at: key ifAbsent: prng price).
          prng next ].
       sums keysAndValuesDo: [ :k :v | totalSums at: k update: [ :curr | curr + v ] initial: v ] ].

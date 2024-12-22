@@ -29,19 +29,19 @@ Day22PRNG >> deltaHistory [
 Day22PRNG >> initialize [
 
    startingNumber := 0.
-   deltaHistory := OrderedCollection new
+   deltaHistory := 0
 ]
 
 { #category : 'accessing' }
 Day22PRNG >> next [
 
-   | oldPrice |
+   | oldPrice delta |
    oldPrice := self price.
    currentNumber := (currentNumber << 6 bitXor: currentNumber) % (1 << 24).
    currentNumber := (currentNumber >> 5 bitXor: currentNumber) % (1 << 24).
    currentNumber := (currentNumber << 11 bitXor: currentNumber) % (1 << 24).
-   deltaHistory add: self price - oldPrice.
-   deltaHistory size > 4 ifTrue: [ deltaHistory removeFirst ].
+   delta := self price - oldPrice.
+	deltaHistory := (deltaHistory * 18 + delta + 9) % (18 ** 4).
    ^ currentNumber
 ]
 
