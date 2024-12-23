@@ -44,7 +44,7 @@ Day23Solver >> parseRawData [
 { #category : 'solving' }
 Day23Solver >> solvePart1 [
 
-	^ ((self cliquesOfSize: 3) count: [ :clique | clique anySatisfy: [ :x | x first = $t ] ]) // 3
+   ^ ((self cliquesOfSize: 3) count: [ :clique | clique anySatisfy: [ :x | x first = $t ] ]) // 3
 ]
 
 { #category : 'solving' }
