@@ -11,7 +11,38 @@ Class {
 { #category : 'test data' }
 Day23SolverTest >> sampleInput [
 
-	^ ''
+	^ 'kh-tc
+qp-kh
+de-cg
+ka-co
+yn-aq
+qp-ub
+cg-tb
+vc-aq
+tb-ka
+wh-tc
+yn-cg
+kh-ub
+ta-co
+de-co
+tc-td
+tb-wq
+wh-td
+ta-ka
+td-qp
+aq-cg
+wq-ub
+ub-vc
+de-ta
+wq-aq
+wq-vc
+wh-yn
+ka-de
+kh-ta
+co-tc
+wh-qp
+tb-vc
+td-yn'
 ]
 
 { #category : 'tests' }
@@ -19,7 +50,7 @@ Day23SolverTest >> testSolvePart1 [
 
 	| solver |
 	solver := Day23Solver newFromString: self sampleInput.
-	self assert: solver solvePart1 equals: 0
+	self assert: solver solvePart1 equals: 7
 ]
 
 { #category : 'tests' }
@@ -27,5 +58,5 @@ Day23SolverTest >> testSolvePart2 [
 
 	| solver |
 	solver := Day23Solver newFromString: self sampleInput.
-	self assert: solver solvePart2 equals: 0
+	self assert: solver solvePart2 equals: 'co,de,ka,ta'
 ]
