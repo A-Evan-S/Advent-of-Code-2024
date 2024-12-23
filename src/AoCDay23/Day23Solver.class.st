@@ -32,13 +32,13 @@ Day23Solver >> isClique: aCollection [
 
 { #category : 'parsing' }
 Day23Solver >> parseRawData [
-	| comps |
-	computers := Dictionary new.
-	rawData lines do: [ :line |
-		comps := line splitOn: '-'.
-		(computers at: (comps first) ifAbsentPut: (OrderedCollection new)) add: comps second.
-		(computers at: (comps second) ifAbsentPut: (OrderedCollection new)) add: comps first.
-	].
+
+   | comps |
+   computers := Dictionary new.
+   rawData lines do: [ :line |
+      comps := line splitOn: '-'.
+      (computers at: comps first ifAbsentPut: OrderedCollection new) add: comps second.
+      (computers at: comps second ifAbsentPut: OrderedCollection new) add: comps first ]
 ]
 
 { #category : 'solving' }
