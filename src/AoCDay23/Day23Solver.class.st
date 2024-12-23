@@ -62,8 +62,7 @@ Day23Solver >> solvePart2 [
                combinations: size - 1
                atATimeDo: [ :comb |
                   testing := comb asOrderedCollection , { comp }.
-                  (self isClique: testing) ifTrue: [
-                     ^ ',' join: (testing collect: #name) sorted ] ] ] ] ].
+                  (self isClique: testing) ifTrue: [ ^ ',' join: (testing collect: #name) sorted ] ] ] ] ].
 
-   ^ -1
+   ^ nil
 ]
