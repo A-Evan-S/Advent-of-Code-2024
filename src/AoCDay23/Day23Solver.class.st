@@ -41,9 +41,8 @@ Day23Solver >> solvePart1 [
          seen add: comp.
          neighbors combinations: 2 atATimeDo: [ :comb |
             testing := comb , { comp }.
-				((self isClique: testing) and:  [
-                testing anySatisfy: [ :x | x first = $t ] ])
-               ifTrue: [ count := count + 1 ] ] ] ].
+            (self isClique: testing) & (testing anySatisfy: [ :x | x first = $t ]) ifTrue: [
+               count := count + 1 ] ] ] ].
    ^ count // 3
 ]
 
