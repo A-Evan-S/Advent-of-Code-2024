@@ -13,9 +13,9 @@ Class {
 
 { #category : 'testing' }
 Day23Solver >> isClique: aCollection [
-	
+
    aCollection withIndexDo: [ :v :i |
-      ((aCollection allButFirst: i) allSatisfy: [ :n | (computers at: n) includes: v ]) ifFalse: [ ^ false ] ].
+      ((computers at: v) includesAll: (aCollection allButFirst: i)) ifFalse: [ ^ false ] ].
    ^ true
 ]
 
@@ -33,32 +33,26 @@ Day23Solver >> parseRawData [
 { #category : 'solving' }
 Day23Solver >> solvePart1 [
 
-   | count seen testing |
+   | count testing |
    count := 0.
-   seen := Set new.
    computers keysAndValuesDo: [ :comp :neighbors |
-      (seen includes: comp) ifFalse: [
-         seen add: comp.
-         neighbors combinations: 2 atATimeDo: [ :comb |
-            testing := comb , { comp }.
-            (self isClique: testing) & (testing anySatisfy: [ :x | x first = $t ]) ifTrue: [
-               count := count + 1 ] ] ] ].
+      neighbors combinations: 2 atATimeDo: [ :comb |
+         testing := comb , { comp }.
+         (self isClique: testing) & (testing anySatisfy: [ :x | x first = $t ]) ifTrue: [
+            count := count + 1 ] ] ].
    ^ count // 3
 ]
 
 { #category : 'solving' }
 Day23Solver >> solvePart2 [
 
-   | seen testing maxSize |
+   | testing maxSize |
    maxSize := computers values first size + 1.
    maxSize to: 1 by: -1 do: [ :size |
-      seen := Set new.
       computers keysAndValuesDo: [ :comp :neighbors |
-         (seen includes: comp) ifFalse: [
-            seen add: comp.
-            neighbors combinations: size - 1 atATimeDo: [ :comb |
-               testing := comb asOrderedCollection , { comp }.
-               (self isClique: testing) ifTrue: [
-                  ^ ',' join: testing sorted ] ] ] ] ].
+         neighbors combinations: size - 1 atATimeDo: [ :comb |
+            testing := comb asOrderedCollection , { comp }.
+            (self isClique: testing) ifTrue: [
+               ^ ',' join: testing sorted ] ] ] ].
    ^ nil
 ]
