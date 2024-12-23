@@ -13,8 +13,9 @@ Class {
 
 { #category : 'testing' }
 Day23Solver >> isClique: aCollection [
+	
    aCollection withIndexDo: [ :v :i |
-      ((aCollection allButFirst: i) allSatisfy: [ :n | n hasNeighbor: v ]) ifFalse: [ ^ false ] ].
+      ((aCollection allButFirst: i) allSatisfy: [ :n | (computers at: n) includes: v ]) ifFalse: [ ^ false ] ].
    ^ true
 ]
 
@@ -24,10 +25,8 @@ Day23Solver >> parseRawData [
 	computers := Dictionary new.
 	rawData lines do: [ :line |
 		comps := line splitOn: '-'.
-		computers at: (comps first) ifAbsentPut: (Day23Computer new name: (comps first)).
-		computers at: (comps second) ifAbsentPut: (Day23Computer new name: (comps second)).
-		(computers at: (comps first)) addNeighbor: (computers at: (comps second)).
-		(computers at: (comps second)) addNeighbor: (computers at: (comps first)).
+		(computers at: (comps first) ifAbsentPut: (OrderedCollection new)) add: comps second.
+		(computers at: (comps second) ifAbsentPut: (OrderedCollection new)) add: comps first.
 	].
 ]
 
@@ -37,13 +36,13 @@ Day23Solver >> solvePart1 [
    | count seen testing |
    count := 0.
    seen := Set new.
-   computers valuesDo: [ :comp |
-      (seen includes: comp name) ifFalse: [
-         seen add: comp name.
-         comp neighbors combinations: 2 atATimeDo: [ :comb |
+   computers keysAndValuesDo: [ :comp :neighbors |
+      (seen includes: comp) ifFalse: [
+         seen add: comp.
+         neighbors combinations: 2 atATimeDo: [ :comb |
             testing := comb , { comp }.
 				((self isClique: testing) and:  [
-                testing anySatisfy: [ :x | x name first = $t ] ])
+                testing anySatisfy: [ :x | x first = $t ] ])
                ifTrue: [ count := count + 1 ] ] ] ].
    ^ count // 3
 ]
@@ -52,17 +51,15 @@ Day23Solver >> solvePart1 [
 Day23Solver >> solvePart2 [
 
    | seen testing maxSize |
-   maxSize := computers values first neighbors size + 1.
+   maxSize := computers values first size + 1.
    maxSize to: 1 by: -1 do: [ :size |
       seen := Set new.
-      computers do: [ :comp |
-         (seen includes: comp name) ifFalse: [
-            seen add: comp name.
-            comp neighbors
-               combinations: size - 1
-               atATimeDo: [ :comb |
-                  testing := comb asOrderedCollection , { comp }.
-                  (self isClique: testing) ifTrue: [ ^ ',' join: (testing collect: #name) sorted ] ] ] ] ].
-
+      computers keysAndValuesDo: [ :comp :neighbors |
+         (seen includes: comp) ifFalse: [
+            seen add: comp.
+            neighbors combinations: size - 1 atATimeDo: [ :comb |
+               testing := comb asOrderedCollection , { comp }.
+               (self isClique: testing) ifTrue: [
+                  ^ ',' join: testing sorted ] ] ] ] ].
    ^ nil
 ]
