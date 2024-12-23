@@ -11,6 +11,17 @@ Class {
 	#package : 'AoCDay23'
 }
 
+{ #category : 'solving' }
+Day23Solver >> cliquesOfSize: size [
+
+   | potentialCliques |
+   potentialCliques := OrderedCollection new.
+   computers keysAndValuesDo: [ :comp :neighbors |
+      neighbors combinations: size - 1 atATimeDo: [ :comb |
+         potentialCliques add: comb asOrderedCollection , { comp } ] ].
+   ^ potentialCliques select: [ :x | self isClique: x ]
+]
+
 { #category : 'testing' }
 Day23Solver >> isClique: aCollection [
 
@@ -33,26 +44,15 @@ Day23Solver >> parseRawData [
 { #category : 'solving' }
 Day23Solver >> solvePart1 [
 
-   | count testing |
-   count := 0.
-   computers keysAndValuesDo: [ :comp :neighbors |
-      neighbors combinations: 2 atATimeDo: [ :comb |
-         testing := comb , { comp }.
-         (self isClique: testing) & (testing anySatisfy: [ :x | x first = $t ]) ifTrue: [
-            count := count + 1 ] ] ].
-   ^ count // 3
+	^ ((self cliquesOfSize: 3) count: [ :clique | clique anySatisfy: [ :x | x first = $t ] ]) // 3
 ]
 
 { #category : 'solving' }
 Day23Solver >> solvePart2 [
 
-   | testing maxSize |
+   | maxSize cliques |
    maxSize := computers values first size + 1.
    maxSize to: 1 by: -1 do: [ :size |
-      computers keysAndValuesDo: [ :comp :neighbors |
-         neighbors combinations: size - 1 atATimeDo: [ :comb |
-            testing := comb asOrderedCollection , { comp }.
-            (self isClique: testing) ifTrue: [
-               ^ ',' join: testing sorted ] ] ] ].
-   ^ nil
+      cliques := self cliquesOfSize: size.
+      cliques ifNotEmpty: [ ^ ',' join: cliques first sorted ] ].
 ]
