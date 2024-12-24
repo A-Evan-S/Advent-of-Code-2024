@@ -110,6 +110,7 @@ Day24SolverTest >> testSolvePart1 [
 Day24SolverTest >> testSolvePart2 [
 
 	| solver |
-	solver := Day24Solver newFromString: self sampleInput.
-	self assert: solver solvePart2 equals: 0
+	solver := Day24Solver newFromString: self sampleInput3.
+	solver intendedOperation: #bitAnd:.
+	self assert: solver solvePart2 equals: 'z00,z01,z02,z05'
 ]
